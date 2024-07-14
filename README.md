@@ -33,11 +33,13 @@ All configs can be found in [config.py](./config.py)
 
 ## Quick Start
 ### Requirements
-Install requirements:
+First, Install requirements:
 ```bash
 pip install -r requirements.txt
 ```
-Start simulation:
+Second, Add your Api Key at [api.py](./api.py)
+
+Finally, Start simulation:
 ```bash
 python main.py
 ```
