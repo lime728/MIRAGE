@@ -50,5 +50,12 @@ class NPO(BaseEnv):
         self.end_stage()
         print('End Stage Over...')
 
+        # Eval Stage
+        print('********************Eval Stage********************')
+        self.rouge_eval()
+        self.llms_eval()
+        print('Evaluation Stage Over...')
+
+        self.save_config()
         self.logger.close()
         print("******************************Finish******************************")

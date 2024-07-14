@@ -14,6 +14,8 @@ class NPC(BaseEnv):
 
         self.prompt_converse_raw = read_txt(Config.DataDir / script_name / 'self_prompts' / 'prompt_converse.txt')
         self.prompt_select_raw = read_txt(Config.DataDir / script_name / 'self_prompts' / 'prompt_select.txt')
+        self.prompt_query = read_txt(Config.DataDir / script_name / 'self_prompts' / 'prompt_query.txt')
+        self.prompt_belief = read_txt(Config.DataDir / script_name / 'self_prompts' / 'prompt_belief.txt')
 
     def converse_stage(self):
         while self.turns < Config.MaxTurnNum:
@@ -45,7 +47,48 @@ class NPC(BaseEnv):
                 self.history += name + '：' + history_converse + '\n'
                 self.history += name + '：' + task_history + '\n'
                 self.history = self.token_check(self.history)
+
+                # query & belief Eval
+                for candidate_name in self.candidate_list:
+                    self.self_query(self.history_introduction, self.history, candidate_name, self.candidates)
+                    self.self_belief(self.history_introduction, self.history, candidate_name, self.candidates)
             self.turns += 1
+
+    def self_query(self, history_introduction, history, other_name, candidates):
+        # 怀疑度评估，怀疑度[0, 1, 2]
+        history = self.token_check(history)
+        prompt_query = self.prompt_query.format(
+            history=history_introduction+history,
+            other_name=other_name,
+        )
+        while True:
+            try:
+                response = Api(Config.Model).run_api(prompt_query)
+                query_response = response.split('### RESPONSE:')[1].strip()
+                candidates[other_name]['query'] += int(query_response)
+                break
+            except:
+                self.fail_num += 1
+        self.save_log('Env', prompt_query, template='prompt_query')
+        self.save_log('Agent', response, template='prompt_query')
+
+    def self_belief(self, history_introduction, history, other_name, candidates):
+        # 信任度评估，信任度[-2, -1, 0]
+        history = self.token_check(history)
+        prompt_belief = self.prompt_belief.format(
+            history=history_introduction+history,
+            other_name=other_name,
+        )
+        while True:
+            try:
+                response = Api(Config.Model).run_api(prompt_belief)
+                belief_response = response.split('### RESPONSE:')[1].strip()
+                candidates[other_name]['query'] -= int(belief_response)
+                break
+            except:
+                self.fail_num += 1
+        self.save_log('Env', prompt_belief, template='prompt_belief')
+        self.save_log('Agent', response, template='prompt_belief')
 
     def select(self):
         for name, background in self.env_summary.items():
@@ -81,6 +124,10 @@ class NPC(BaseEnv):
             self.history += name + '：' + history_converse + '\n'
             self.history += name + '：' + task_history + '\n'
             self.history = self.token_check(self.history)
+
+            for candidate_name in self.candidate_list:
+                self.self_query(self.history_introduction, self.history, candidate_name, self.candidates)
+                self.self_belief(self.history_introduction, self.history, candidate_name, self.candidates)
 
     def run(self):
         print("******************************Start******************************")
@@ -143,5 +190,12 @@ class NPC(BaseEnv):
         self.end_stage()
         print('End Stage Over...')
 
+        # Eval Stage
+        print('********************Eval Stage********************')
+        self.rouge_eval()
+        self.llms_eval()
+        print('Evaluation Stage Over...')
+
+        self.save_config()
         self.logger.close()
         print("******************************Finish******************************")

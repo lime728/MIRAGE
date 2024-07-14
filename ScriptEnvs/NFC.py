@@ -43,8 +43,9 @@ class NFC(BaseEnv):
 
             self.role_parameter[name]['last_action'].append(response)
 
-            # query
+            # query & belief Eval
             self.query(self.history_introduction, '', name, introduction, self.candidates)
+            self.belief(self.history_introduction, '', name, introduction, self.candidates)
 
             if "self_introduction" not in self.role_parameter[name].keys():
                 self.role_parameter[name]['self_introduction'] = introduction
@@ -91,6 +92,7 @@ class NFC(BaseEnv):
                 self.save_log(name, response, template='prompt_converse')
 
                 self.query(self.history_introduction, self.history, name, history_converse, self.candidates)
+                self.belief(self.history_introduction, self.history, name, history_converse, self.candidates)
 
                 if action == '调查':
                     clue, task_history = self.get_clue(item)
@@ -100,6 +102,7 @@ class NFC(BaseEnv):
                     ask_content = re.findall('】：(.*)', history_converse, re.DOTALL)[0]
                     task_history = self.ask(item, name, background, self.history_introduction, self.history, ask_content)
                     self.query(self.history_introduction, self.history, item, task_history, self.candidates)
+                    self.belief(self.history_introduction, self.history, item, task_history, self.candidates)
                 else:
                     raise ValueError('Unaccepted action!')
                 self.role_parameter[name]['last_action'].append(response + '\n' + name + '：' + task_history)

@@ -1,16 +1,39 @@
 # 基类
 # BaseEnv
 # TYPE: Base class
-import re
 
 from data_loader import *
 from utils import Api
 from utils import Config
 from logger import Logger
+from pathlib import Path
 
 
 class BaseEnv:
     def __init__(self, script_name, script_files):
+        # global configs
+        self.configs = dict()
+        for k, v in Config.__dict__.items():
+            if '__' in k:
+                continue
+            if isinstance(v, Path):
+                self.configs[k] = str(v)
+            elif type(v) == list and isinstance(v[0], Path):
+                str_v = list()
+                for ls in v:
+                    str_v.append(str(ls))
+                self.configs[k] = str_v
+            elif type(v) == dict:
+                str_v = dict()
+                for d_k, d_v in v.items():
+                    d_str_v = list()
+                    for ls in d_v:
+                        d_str_v.append(str(ls))
+                    str_v[d_k] = d_str_v
+                self.configs[k] = str_v
+            else:
+                self.configs[k] = v
+
         # Base config
         self.words_num = Config.MaxBaseScriptSummaryToken
         self.logger = Logger(script_name)
@@ -19,6 +42,7 @@ class BaseEnv:
         self.turns = 0
         self.script_name = script_name
         self.fail_num = 0
+        self.truth = read_json(Config.ScriptTruth)[script_name]
 
         # Base Env
         self.env_summary = dict()
@@ -43,8 +67,10 @@ class BaseEnv:
         self.prompt_ask_raw = read_txt('./prompts/prompt_ask.txt')
         self.prompt_introduction_raw = read_txt("./prompts/prompt_introduction.txt")
         self.prompt_query = read_txt('./prompts/prompt_query.txt')
+        self.prompt_belief = read_txt('./prompts/prompt_belief.txt')
         self.prompt_vote = read_txt('./prompts/prompt_vote.txt')
         self.prompt_eval = read_txt('./prompts/prompt_eval.txt')
+        self.prompt_eval_rouge = read_txt('./prompts/prompt_eval_rouge.txt')
 
     def add_script(self, scripts):
         for name, script in scripts.items():
@@ -109,29 +135,42 @@ class BaseEnv:
         return ask_response
 
     def query(self, history_introduction, history, other_name, content, candidates):
-        # 如果一个人的语句中有漏洞，就给一个人的怀疑度+1，最后把怀疑度最高的人投出去。
+        # 怀疑度评估，怀疑度[0, 1, 2]
         history = self.token_check(history)
-        for name, description in self.env_summary.items():
-            if name == other_name:
-                continue
-            prompt_query = self.prompt_query.format(
-                name=name,
-                description=description,
-                self_clues=self.role_parameter[name]['self_clues'],
-                history=history_introduction+history,
-                other_name=other_name,
-                content=content
-            )
-            while True:
-                try:
-                    response = Api(Config.Model).run_api(prompt_query)
-                    query_response = response.split('### RESPONSE:')[1].strip()
-                    candidates[name]['query'] += int(query_response)
-                    break
-                except:
-                    self.fail_num += 1
-            self.save_log('Env', prompt_query, template='prompt_query')
-            self.save_log(name, response, template='prompt_query')
+        prompt_query = self.prompt_query.format(
+            history=history_introduction+history,
+            other_name=other_name,
+            content=content
+        )
+        while True:
+            try:
+                response = Api(Config.Model).run_api(prompt_query)
+                query_response = response.split('### RESPONSE:')[1].strip()
+                candidates[other_name]['query'] += int(query_response)
+                break
+            except:
+                self.fail_num += 1
+        self.save_log('Env', prompt_query, template='prompt_query')
+        self.save_log('Agent', response, template='prompt_query')
+
+    def belief(self, history_introduction, history, other_name, content, candidates):
+        # 信任度评估，信任度[-2, -1, 0]
+        history = self.token_check(history)
+        prompt_belief = self.prompt_belief.format(
+            history=history_introduction+history,
+            other_name=other_name,
+            content=content
+        )
+        while True:
+            try:
+                response = Api(Config.Model).run_api(prompt_belief)
+                belief_response = response.split('### RESPONSE:')[1].strip()
+                candidates[other_name]['query'] -= int(belief_response)
+                break
+            except:
+                self.fail_num += 1
+        self.save_log('Env', prompt_belief, template='prompt_belief')
+        self.save_log('Agent', response, template='prompt_belief')
 
     def script_summarize(self, name, content):
         summarized_content = dict()
@@ -150,7 +189,7 @@ class BaseEnv:
                     except:
                         self.fail_num += 1
                 self.save_log('Env', prompt_script_summarize, template='prompt_script_summarize')
-                self.save_log('Env', prompt_script_summarize, template='prompt_script_summarize')
+                self.save_log('Env', response, template='prompt_script_summarize')
             elif token_calculate(v) > 4000:
                 print('Summarizing Super-Long Script 《{}》——{}——{}...'.format(self.script_name, name, k))
                 s_content = v
@@ -169,7 +208,7 @@ class BaseEnv:
                         except:
                             self.fail_num += 1
                     self.save_log('Env', prompt_script_summarize, template='prompt_script_summarize')
-                    self.save_log('Env', prompt_script_summarize, template='prompt_script_summarize')
+                    self.save_log('Env', response, template='prompt_script_summarize')
                     s_content = s_content[4000:]
                 sp_content = str()
                 for part in splited_summarized_content:
@@ -187,7 +226,7 @@ class BaseEnv:
                     except:
                         self.fail_num += 1
                 self.save_log('Env', prompt_script_summarize, template='prompt_script_summarize')
-                self.save_log('Env', prompt_script_summarize, template='prompt_script_summarize')
+                self.save_log('Env', response, template='prompt_script_summarize')
             else:
                 summarized_content[k] = v
         return summarized_content
@@ -256,8 +295,9 @@ class BaseEnv:
 
             self.role_parameter[name]['last_action'].append(response)
 
-            # query
+            # query & belief Eval
             self.query(self.history_introduction, '', name, introduction, self.candidates)
+            self.belief(self.history_introduction, '', name, introduction, self.candidates)
 
             if "self_introduction" not in self.role_parameter[name].keys():
                 self.role_parameter[name]['self_introduction'] = introduction
@@ -301,7 +341,9 @@ class BaseEnv:
                 self.save_log('Env', prompt_converse, template='prompt_converse')
                 self.save_log(name, response, template='prompt_converse')
 
+                # query & belief Eval
                 self.query(self.history_introduction, self.history, name, history_converse, self.candidates)
+                self.belief(self.history_introduction, self.history, name, history_converse, self.candidates)
 
                 if action == '调查':
                     clue, task_history = self.get_clue(item)
@@ -311,6 +353,7 @@ class BaseEnv:
                     ask_content = re.findall('】：(.*)', history_converse, re.DOTALL)[0]
                     task_history = self.ask(item, name, background, self.history_introduction, self.history, ask_content)
                     self.query(self.history_introduction, self.history, item, task_history, self.candidates)
+                    self.belief(self.history_introduction, self.history, item, task_history, self.candidates)
                 else:
                     raise ValueError('Unaccepted action!')
                 self.role_parameter[name]['last_action'].append(response + '\n' + name + '：' + task_history)
@@ -333,10 +376,10 @@ class BaseEnv:
                     response = Api(Config.Model).run_api(prompt_vote)
                     vote_response = response.split('### RESPONSE:')[1].strip()
                     try:
-                        self.candidates[vote_response]['query'] += len(self.scripts.keys()) * 1
+                        self.candidates[vote_response]['query'] += len(self.env_summary.keys()) * 1
                     except:
                         vote_character = re.findall('(.*?)\n', vote_response, re.DOTALL)[0]
-                        self.candidates[vote_character]['query'] += len(self.scripts.keys()) * 1
+                        self.candidates[vote_character]['query'] += len(self.env_summary.keys()) * 1
                     break
                 except:
                     self.fail_num += 1
@@ -383,25 +426,41 @@ class BaseEnv:
         self.vote_stage()
         print('Vote Stage Over...')
 
-        # End stage
+        # End Stage
         print('********************End Stage********************')
         self.end_stage()
         print('End Stage Over...')
 
-        # self.logger.close()
+        # Eval Stage
+        print('********************Eval Stage********************')
+        self.rouge_eval()
+        self.llms_eval()
+        print('Evaluation Stage Over...')
+
+        self.save_config()
+        self.logger.close()
         print("******************************Finish******************************")
 
-    def save_log(self, user, text, template):
+    def save_log(self, user, text, template, model=Config.Model):
         if Config.Console:
-            if user != 'Env' and 'query' not in template and 'clue' not in template:
+            if user != 'Env' and 'query' not in template and 'clue' not in template and 'belief' not in template:
                 if 'eval' in template:
+                    model = Config.Eval_Model
+                if 'eval' in template and 'rouge' not in template:
                     print(user + '：' + text.split('### RESPONSE:')[0].strip() + '\n')
-                print(user + '：' + text.split('### RESPONSE:')[1].replace('\n', '').strip() + '\n')
+                elif 'eval' in template and 'rouge' in template:
+                    print(user + '：' + text.split('### RESPONSE:')[0][12:].strip() + '\n')
+
+                if 'rouge' in template:
+                    print(user + '：' + str(self.role_parameter[user]['eval_rouge']['f']) + '\n')
+                else:
+                    print(user + '：' + text.split('### RESPONSE:')[1].replace('\n', '').strip() + '\n')
         self.logger.gprint(
             script_name=self.script_name,
             user=user,
             text=text,
             template=template,
+            model=model,
             debug=self.debug,
             console=self.console
         )
@@ -415,24 +474,24 @@ class BaseEnv:
             console=self.console
         )
 
-    def eval(self):
-        # TODO
-        print("Evaluating 《{}》...".format(self.script_name))
-        for name, data in self.role_parameter.items():
+    def llms_eval(self):
+        print('LLMs Evaluation...')
+        for name, background in self.env_summary.items():
             actions = ''
-            for action in data['last_action']:
+            for action in self.role_parameter[name]['last_action']:
                 actions += action + '\n'
             prompt_eval = self.prompt_eval.format(
                 name=name,
                 description=self.env_summary[name],
-                self_clues=data['self_clues'],
+                self_clues=self.role_parameter[name]['self_clues'],
                 history=self.history_introduction+self.history,
                 actions=actions,
                 role_list=list(self.scripts.keys()),
+                truth=self.truth,
             )
             while True:
                 try:
-                    response = Api('gpt-4-1106-preview').run_api(prompt_eval)
+                    response = Api(Config.Eval_Model).run_api(prompt_eval)
                     thought = response.split('### RESPONSE:')[0].strip()
                     score = int(response.split('### RESPONSE:')[1].strip())
                     break
@@ -443,4 +502,40 @@ class BaseEnv:
 
             self.save_log('Env', prompt_eval, template='prompt_eval')
             self.save_log(name, response, template='prompt_eval')
-        print("Evaluating 《{}》 Over...".format(self.script_name))
+
+    def rouge_eval(self):
+        print('Rouge Evaluation...')
+        for name, background in self.env_summary.items():
+            actions = ''
+            for action in self.role_parameter[name]['last_action']:
+                actions += action + '\n'
+            prompt_eval_rouge = self.prompt_eval_rouge.format(
+                name=name,
+                history=self.history_introduction + self.history,
+                actions=actions,
+                role_list=list(self.scripts.keys()),
+            )
+            while True:
+                try:
+                    response = Api(Config.Eval_Model).run_api(prompt_eval_rouge)
+                    thought = response.split('### RESPONSE:')[0].strip()
+                    description = response.split('### RESPONSE:')[1].strip()
+                    break
+                except:
+                    self.fail_num += 1
+            self.role_parameter[name]['eval_thought_rouge'] = thought
+            self.role_parameter[name]['eval_description'] = description
+            self.role_parameter[name]['eval_rouge'] = cal_rouge_l(description, self.env_summary[name])
+
+            self.save_log('Env', prompt_eval_rouge, template='prompt_eval_rouge')
+            self.save_log(name, response, template='prompt_eval_rouge')
+
+    def save_config(self):
+        message = dict()
+        if Config.DEBUG:
+            print(message)
+        for k, v in self.__dict__.items():
+            if not isinstance(v, Logger):
+                message[k] = v
+        self.logger.messages.append(message)
+        self.logger.log_fw.write(json.dumps(message, ensure_ascii=False, indent=1) + '\n')
