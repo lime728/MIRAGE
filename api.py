@@ -9,12 +9,16 @@ ApiData = {
     "OhMyGPT": {
         "url": "https://cn2us02.opapi.win/v1/",
         "key": "sk-BOATTlUU478801532161T3BLbkFJA37E314ccd1949efa37d",
-        # "key": "sk-YozhcWKBfeEc0103e8A8T3BlbKFJf7f1e48d0E4642378E05"
+        # "key": "sk-YozhcWKBfeEc0103e8A8T3BlbKFJf7f1e48d0E4642378E05",
     },
     "GLM": {
         "url": "https://open.bigmodel.cn/api/paas/v4/",
         # "key": "5c2cfde48aec332f216171d7a2670dcb.5yj8NDkKyEmbS5TT",
         "key": "dc9729905eb65ab397283ce5f0634163.9ZOXGVL5lOX4NNOz"
+    },
+    "Support": {
+        "url": "https://api.pumpkinaigc.online/v1",
+        "key": "sk-oGSSO6nI0EQwqeyU68737fA322674e1b80F1E06dBeD74eC1"
     }
 }
 
@@ -71,8 +75,10 @@ class Api:
                 api_key=self.key
             )
         else:
-            self.url = ApiData['OhMyGPT']['url']
-            self.key = ApiData['OhMyGPT']['key']
+            self.url = ApiData['Support']['url']
+            self.key = ApiData['Support']['key']
+            # self.url = ApiData['OhMyGPT']['url']
+            # self.key = ApiData['OhMyGPT']['key']
             self.client = OpenAI(
                 base_url=self.url,
                 api_key=self.key
@@ -201,7 +207,7 @@ class Api:
 if __name__ == "__main__":
     message = 'Hello! How are you?'
     # model_request = 'GPT4-turbo'
-    model_client_1 = 'gpt-4-1106-preview'
+    model_client_1 = 'gpt-4o'
     model_client_2 = 'glm-4'
     # Test run_with_request
     # request_response = Api(model_request).run_with_request(message)

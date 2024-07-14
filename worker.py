@@ -1,7 +1,9 @@
-from ScriptEnvs import NFO, NFC, NPO, NPC, AFO, AFC, APO, APC
+from ScriptEnvs import NFO, NFC, NPO, NPC, AFO, AFC, APO, APC, BaseEnv
 from utils import Config
-import time
+from logger import Logger
+from pathlib import Path
 from data_loader import *
+import time
 
 
 class MainWorker:
@@ -39,13 +41,62 @@ class MainWorker:
             raise ValueError('Unaccepted ScriptName')
 
     def run_env(self):
-        print("Running Environment 《{}》...".format(self.ScriptName))
         st_time = time.time()
+
+        # Run Step
+        print("Running Environment 《{}》...".format(self.ScriptName))
         self.ScriptEnv.run()
+
         ed_time = time.time()
         time_used = calculate_time_used(st_time, ed_time)
         print('Time used: {}'.format(time_used))
 
-    def eval_env(self):
-        print("Evaluation Step...")
-        self.ScriptEnv.eval()
+
+class EvalWorker(BaseEnv.BaseEnv):
+    def __init__(self):
+        pass
+
+    def run_env(self, path):
+        # global configs
+        self.configs = dict()
+        for k, v in Config.__dict__.items():
+            if '__' in k:
+                continue
+            if isinstance(v, Path):
+                self.configs[k] = str(v)
+            elif type(v) == list and isinstance(v[0], Path):
+                str_v = list()
+                for ls in v:
+                    str_v.append(str(ls))
+                self.configs[k] = str_v
+            elif type(v) == dict:
+                str_v = dict()
+                for d_k, d_v in v.items():
+                    d_str_v = list()
+                    for ls in d_v:
+                        d_str_v.append(str(ls))
+                    str_v[d_k] = d_str_v
+                self.configs[k] = str_v
+            else:
+                self.configs[k] = v
+
+        # init by load
+        log_history, configs = load_log(path)
+        for k, v in configs.items():
+            setattr(self, k, v)
+        self.logger = Logger(self.script_name)
+        self.logger.messages = log_history
+
+        st_time = time.time()
+
+        # Run Step
+        print("Evaluating Environment 《{}》 from Path:\"{}\"...".format(self.script_name, path))
+        self.llms_eval()
+        self.rouge_eval()
+        self.save_config()
+        self.logger.close()
+        print('Evaluation Finished...')
+
+        ed_time = time.time()
+        time_used = calculate_time_used(st_time, ed_time)
+        print('Time used: {}'.format(time_used))

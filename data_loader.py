@@ -1,7 +1,16 @@
 import json
 import tiktoken
-import re
 from datetime import datetime
+import pickle
+import re
+from rouge_chinese import Rouge
+import jieba
+
+
+def cal_rouge_l(predict, truth):
+    predict_ = ' '.join(jieba.cut(predict))
+    truth_ = ' '.join(jieba.cut(truth))
+    return Rouge().get_scores(predict_, truth_)[0]['rouge-l']
 
 
 def read_txt(path):
@@ -18,9 +27,20 @@ def read_json(path):
     return data
 
 
+def read_pickle(path):
+    with open(path, 'rb') as f:
+        data = pickle.load(f)
+    return data
+
+
 def write_json(path, data):
     with open(path, 'w', encoding='utf-8') as f:
         f.write(json.dumps(data, ensure_ascii=False, indent=1))
+
+
+def write_pickle(path, data):
+    with open(path,'wb') as f:
+        pickle.dump(data, f)
 
 
 def token_calculate(text, model_name='gpt-4'):
@@ -44,7 +64,25 @@ def calculate_time_used(st_time, ed_time):
     return "{}:{}:{}".format(hours, minutes, seconds)
 
 
-def load_log(path, debug=False, console=True):
+def load_log(path):
+    try:
+        logs = []
+        with open(path, 'r', encoding='utf-8') as f:
+            for line in f.readlines():
+                logs.append(json.loads(line))
+    except:
+        logs = read_json(path)
+    log_history = list()
+    configs = logs.pop(-1)
+    for sentence in logs:
+        if 'Template' in sentence.keys():
+            if 'eval' in sentence['Template']:
+                continue
+        log_history.append(sentence)
+    return log_history, configs
+
+
+def print_log(path, debug=False, console=True):
     try:
         logs = []
         with open(path, 'r', encoding='utf-8') as f:
@@ -109,6 +147,6 @@ def calculate_token(path):
 
 
 if __name__ == '__main__':
-    log_path = '.\storage\log_2024_03_20_17_59_15_gpt_4_turbo\东方之星号游轮事件\history.json'
-    load_log(log_path, debug=False, console=True)
+    log_path = r'.\storage\compare_gpt_4\东方之星号游轮事件_gpt_4\history.json'
+    print_log(log_path, debug=False, console=True)
     # calculate_token(log_path)

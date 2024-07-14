@@ -27,7 +27,7 @@ class Logger:
         self.messages.append(message)
         self.log_fw.write(json.dumps(message, ensure_ascii=False, indent=1)+'\n')
 
-    def gprint(self, script_name, user, text, template, debug=False, console=True):
+    def gprint(self, script_name, user, text, template, model, debug=False, console=True):
         message = {
                 'Script_name': script_name,
                 'Name': user,
@@ -35,7 +35,7 @@ class Logger:
                 'MessageLength': len(text),
                 'TokenLength': token_calculate(text),
                 'Template': template,
-                'ApiModel': Config.Model,
+                'ApiModel': model,
                 'Debug': debug,
                 'Console': console,
                 'ForceSummary': Config.force_summary,
