@@ -31,6 +31,13 @@ Here is a average result of Script **The Eastern Star cruise ship** based on **G
 
 All configs can be found in [config.py](./config.py)
 
+## Attention
+The cost of **Context** Tokens of Script **The Eastern Star cruise ship** is 716,440->7.1644 USD.
+
+The cost of **Completion** Tokens of Script **The Eastern Star cruise ship** is 53,630->1.6089 USD.
+
+Take **GPT-4** as an example, it costs about **8.7733** USD.
+
 ## Quick Start
 ### Requirements
 First, Install requirements:
