@@ -36,7 +36,7 @@ The cost of **Context** Tokens of Script **The Eastern Star cruise ship** is 716
 
 The cost of **Completion** Tokens of Script **The Eastern Star cruise ship** is 53,630->1.6089 USD.
 
-Take **GPT-4** as an example, it costs about **8.7733** USD.
+Take **GPT-4** as an example, 8 Scripts costs about **600** USD.
 
 ## Quick Start
 ### Requirements
