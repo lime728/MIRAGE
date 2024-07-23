@@ -1,7 +1,5 @@
 import time
 from openai import OpenAI
-import requests
-import json
 from config import Config
 from zhipuai import ZhipuAI
 
@@ -23,31 +21,10 @@ ApiData = {
 '''
 OhMyGPT:
 [
-    "gpt-3.5-turbo",
-    "gpt-3.5-turbo-0301",
-    "gpt-3.5-turbo-0613",
-    "gpt-3.5-turbo-16k",
-    "gpt-3.5-turbo-16k-0613",
-    "gpt-4",
-    "gpt-4-0314",
-    "gpt-4-0613",
-    "gpt-4-32k",
-    "gpt-4-32k-0314",
-    "gpt-4-32k-0613",
+    "gpt-3.5-turbo-0125",
     "gpt-4-1106-preview",
-    "gpt-4-vision-preview",
-    "text-davinci-003",
-    "text-davinci-002",
-    "text-curie-001",
-    "text-babbage-001",
-    "text-ada-001",
-    "text-embedding-ada-002",
-    "text-search-ada-doc-001",
-    "dall-e",
-    "text-davinci-edit-001",
-    "code-davinci-edit-001",
-    "whisper-1",
-    "claude-2-web"
+    "gpt-4-turbo",
+    "gpt-4o"
 ]
 ChatGLM:
 [
@@ -91,7 +68,7 @@ class Api:
         self.output_console = output_console
 
     def run_api(self, message):
-        if self.model in ['gpt-4-turbo']:
+        if self.model == Config.Eval_Model:
             self.url = ApiData['OhMyGPT']['url']    # Eval url
             self.key = ApiData['OhMyGPT']['key']    # Eval key
             self.client = OpenAI(
