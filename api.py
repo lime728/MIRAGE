@@ -68,7 +68,7 @@ class Api:
         self.output_console = output_console
 
     def run_api(self, message):
-        if self.model == Config.Eval_Model:
+        if self.model == Config.Eval_Model and Config.Eval_Model != Config.Model:
             self.url = ApiData['OhMyGPT']['url']    # Eval url
             self.key = ApiData['OhMyGPT']['key']    # Eval key
             self.client = OpenAI(
