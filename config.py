@@ -31,6 +31,8 @@ class Config:
     DataDir = ROOT / 'dataset'
     PromptDir = ROOT / 'prompts'
     LogDir = ROOT / 'logs'
+    if not os.path.exists(LogDir):
+        os.makedirs(LogDir)
 
     # Truth
     ScriptTruth = DataDir / 'Truth.json'
