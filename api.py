@@ -73,10 +73,8 @@ class Api:
                 api_key=self.key
             )
         else:
-            self.url = ApiData['Support']['url']
-            self.key = ApiData['Support']['key']
-            # self.url = ApiData['OhMyGPT']['url']
-            # self.key = ApiData['OhMyGPT']['key']
+            self.url = ApiData['Support']['url']    # Agent url
+            self.key = ApiData['Support']['key']    # Agent key
             self.client = OpenAI(
                 base_url=self.url,
                 api_key=self.key
@@ -93,54 +91,16 @@ class Api:
         self.output_console = output_console
 
     def run_api(self, message):
-        if self.model in ['GPT3.5', 'GPT4', 'GPT4-turbo', 'Embedding']:
-            return self.run_with_request(message)
+        if self.model in ['gpt-4-turbo']:
+            self.url = ApiData['OhMyGPT']['url']    # Eval url
+            self.key = ApiData['OhMyGPT']['key']    # Eval key
+            self.client = OpenAI(
+                base_url=self.url,
+                api_key=self.key
+            )
+            return self.run_with_client(message)
         else:
             return self.run_with_client(message)
-
-    def run_with_request(self, message):
-        self.messages.append(
-            {
-                "role": "user",
-                "content": message
-            }
-        )
-        payload = {
-            "messages": self.messages
-        }
-        payload.update(self.gpt_params)
-        retry = 0
-        while retry < Config.MaxRetries:
-            try:
-                response = requests.post(
-                    url=self.url,
-                    headers=self.headers,
-                    data=json.dumps(payload)
-                )
-            except:
-                retry += 1
-                time.sleep(5 * retry)
-                continue
-            try:
-                result = json.loads(response.text)['choices'][0]['message']['content']
-                self.messages.append(
-                    {
-                        "role": "assistant",
-                        "content": result
-                    }
-                )
-                break
-            except Exception as e:
-                print('Api Failed with Exception {}'.format(e))
-                try:
-                    print(response.text)
-                except:
-                    pass
-                retry += 1
-                time.sleep(5 * retry)
-        if retry >= Config.MaxRetries:
-            raise Exception('Over Max Retries!')
-        return result
 
     def run_with_client(self, message, stream=False):
         self.gpt_params['stream'] = stream
