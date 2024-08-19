@@ -8,3 +8,4 @@ from ScriptEnvs.BaseEnv import BaseEnv
 class AFO(BaseEnv):
     def __init__(self, script_name, script_files):
         super().__init__(script_name, script_files)
+        self.culprit.append('衣衫褴褛的老人')

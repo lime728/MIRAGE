@@ -3,13 +3,19 @@
 # TYPE: Normal Part Open
 
 from ScriptEnvs.BaseEnv import BaseEnv
+from data_loader import *
 
 
 class NPO(BaseEnv):
     def __init__(self, script_name, script_files):
         super().__init__(script_name, script_files)
+        self.culprit.append('约翰')
 
-    def run(self):
+    def run(self, path):
+        if path is None:
+            logs = None
+        else:
+            logs = read_json(path)
         print("******************************Start******************************")
 
         # part scripts
@@ -26,18 +32,18 @@ class NPO(BaseEnv):
 
             # Initial base environment
             print('********************Init Stage********************')
-            self.init_stage()
+            self.init_stage(logs)
             print('Init Stage Over...')
 
             if first_turn:
                 # self-introduction
                 print('********************Self-introduction Stage********************')
-                self.self_introduction_stage()
+                self.self_introduction_stage(logs)
                 print('Self-introduction Stage Over...')
 
             # start converse
             print('********************Converse Stage********************')
-            self.converse_stage()
+            self.converse_stage(logs)
             print('Converse Stage Over...')
 
         # Vote Stage

@@ -8,6 +8,7 @@ from ScriptEnvs.BaseEnv import *
 class NFC(BaseEnv):
     def __init__(self, script_name, script_files):
         super().__init__(script_name, script_files)
+        self.culprit.append('方医生')
 
         # Load Scripts
         for path in script_files:
@@ -24,26 +25,37 @@ class NFC(BaseEnv):
             else:
                 pass
 
-    def self_introduction_stage(self):
+    def self_introduction_stage(self, logs):
         for name, background in self.env_summary.items():
             prompt_introduction = self.prompt_introduction_raw.format(
                 name=name,
                 description=background,
                 self_clues=self.role_parameter[name]['self_clues']
             )
-            while True:
-                try:
-                    response = Api(Config.Model).run_api(prompt_introduction)
-                    introduction = response.split('### RESPONSE:')[1].strip()
-                    break
-                except:
-                    self.fail_num += 1
+            if logs is None:
+                while True:
+                    try:
+                        if name in self.culprit:
+                            response = Api(Config.Culprit_Model).run_api(prompt_introduction)
+                        else:
+                            response = Api(Config.Civilian_Model).run_api(prompt_introduction)
+                        introduction = response.split('### RESPONSE:')[1].strip()
+                        break
+                    except:
+                        self.fail_num += 1
+            else:
+                logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+                prompt_introduction_ = logs.pop(0)['Message']
+                response = logs.pop(0)['Message']
+                introduction = response.split('### RESPONSE:')[1].strip()
             self.save_log('Env', prompt_introduction, template='prompt_introduction')
             self.save_log(name, response, template='prompt_introduction')
 
             self.role_parameter[name]['last_action'].append(response)
 
             # query & belief Eval
+            logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+            logs = self.del_logs_with_template(logs, template='prompt_query')
             self.query(self.history_introduction, '', name, introduction, self.candidates)
             self.belief(self.history_introduction, '', name, introduction, self.candidates)
 
@@ -55,7 +67,7 @@ class NFC(BaseEnv):
 
         self.history_introduction = self.token_check(self.history_introduction) + '\n'
 
-    def converse_stage(self):
+    def converse_stage(self, logs):
         while self.turns < Config.MaxTurnNum:
             # converse
             print('**********Turn {}**********'.format(self.turns + 1))
@@ -72,35 +84,89 @@ class NFC(BaseEnv):
                     characters=list(self.scripts.keys()),
                     address=ls_address
                 )
-                while True:
+                if logs is None:
+                    while True:
+                        try:
+                            if name in self.culprit:
+                                response = Api(Config.Culprit_Model).run_api(prompt_converse)
+                            else:
+                                response = Api(Config.Civilian_Model).run_api(prompt_converse)
+                            history_converse = response.split('### RESPONSE:')[1].strip()
+                            action = re.findall('【(.*?)】【', history_converse, re.DOTALL)[0]
+                            item = re.findall('】【(.*?)】：', history_converse, re.DOTALL)[0]
+                            if action == '询问' and item not in self.env_summary.keys():
+                                raise ValueError('Unacceptable name!')
+                            elif action == '调查' and item not in self.clues.keys():
+                                raise ValueError('Unacceptable place!')
+                            elif action not in ['调查', '询问']:
+                                raise ValueError('Unaccepted action!')
+                            else:
+                                break
+                        except:
+                            self.fail_num += 1
+                else:
                     try:
-                        response = Api(Config.Model).run_api(prompt_converse)
+                        logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+                        prompt_converse_ = logs.pop(0)['Message']
+                        response = logs.pop(0)['Message']
                         history_converse = response.split('### RESPONSE:')[1].strip()
                         action = re.findall('【(.*?)】【', history_converse, re.DOTALL)[0]
                         item = re.findall('】【(.*?)】：', history_converse, re.DOTALL)[0]
                         if action == '询问' and item not in self.env_summary.keys():
-                            continue
+                            raise ValueError('Unacceptable name!')
                         elif action == '调查' and item not in self.clues.keys():
-                            continue
+                            raise ValueError('Unacceptable place!')
                         elif action not in ['调查', '询问']:
                             raise ValueError('Unaccepted action!')
-                        else:
-                            break
                     except:
-                        self.fail_num += 1
+                        while True:
+                            try:
+                                if name in self.culprit:
+                                    response = Api(Config.Culprit_Model).run_api(prompt_converse)
+                                else:
+                                    response = Api(Config.Civilian_Model).run_api(prompt_converse)
+                                history_converse = response.split('### RESPONSE:')[1].strip()
+                                action = re.findall('【(.*?)】【', history_converse, re.DOTALL)[0]
+                                item = re.findall('】【(.*?)】：', history_converse, re.DOTALL)[0]
+                                if action == '询问' and item not in self.env_summary.keys():
+                                    raise ValueError('Unacceptable name!')
+                                elif action == '调查' and item not in self.clues.keys():
+                                    raise ValueError('Unacceptable place!')
+                                elif action not in ['调查', '询问']:
+                                    raise ValueError('Unaccepted action!')
+                                else:
+                                    break
+                            except:
+                                self.fail_num += 1
                 self.save_log('Env', prompt_converse, template='prompt_converse')
                 self.save_log(name, response, template='prompt_converse')
 
+                # query & belief Eval
+                logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+                logs = self.del_logs_with_template(logs, template='prompt_query')
                 self.query(self.history_introduction, self.history, name, history_converse, self.candidates)
                 self.belief(self.history_introduction, self.history, name, history_converse, self.candidates)
 
                 if action == '调查':
-                    clue, task_history = self.get_clue(item)
+                    logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+                    logs = self.del_logs_with_template(logs, template='clue')
+                    if item in self.clues.keys():
+                        clue, task_history = self.get_clue(item)
+                    else:
+                        clue = '没有这条线索，你浪费了一次发言机会。'
+                        task_history = '【线索】【{item}】：{clue}'.format(
+                            item=item,
+                            clue=clue
+                        )
                     if Config.Console:
                         print(task_history + '\n')
                 elif action == '询问':
                     ask_content = re.findall('】：(.*)', history_converse, re.DOTALL)[0]
-                    task_history = self.ask(item, name, background, self.history_introduction, self.history, ask_content)
+                    task_history = self.ask(item, name, background, self.history_introduction, self.history, ask_content, logs)
+
+                    # query & belief Eval
+                    logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+                    logs = self.del_logs_with_template(logs, template='prompt_query')
                     self.query(self.history_introduction, self.history, item, task_history, self.candidates)
                     self.belief(self.history_introduction, self.history, item, task_history, self.candidates)
                 else:

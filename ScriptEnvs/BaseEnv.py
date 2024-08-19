@@ -51,6 +51,7 @@ class BaseEnv:
         self.history_introduction = str()
         self.history = str()
         self.address = dict()
+        self.culprit = list()
 
         # Load Scripts
         for path in script_files:
@@ -85,6 +86,13 @@ class BaseEnv:
         else:
             return text
 
+    def del_logs_with_template(self, logs, template):
+        if logs is not None:
+            if logs[0]['Template'] == template:
+                while logs[0]['Template'] == template:
+                    del logs[0]
+        return logs
+
     def summarize(self, text):
         if Config.force_summary and token_calculate(text) <= Config.MaxBaseScriptSummaryToken:
             return text
@@ -94,7 +102,7 @@ class BaseEnv:
             )
             while True:
                 try:
-                    response = Api(Config.Model).run_api(prompt_summarize)
+                    response = Api(Config.Base_Model).run_api(prompt_summarize)
                     result = response.split('### RESPONSE:')[1].strip()
                     break
                 except:
@@ -114,7 +122,7 @@ class BaseEnv:
             self.clues.pop(item)
         return clue, clue_history
 
-    def ask(self, item, name, background,history_introduction, history, ask_content):
+    def ask(self, item, name, background,history_introduction, history, ask_content, logs):
         prompt_ask = self.prompt_ask_raw.format(
             name=item,
             description=background,
@@ -123,13 +131,22 @@ class BaseEnv:
             ask_name=name,
             ask_content=ask_content
         )
-        while True:
-            try:
-                response = Api(Config.Model).run_api(prompt_ask)
-                ask_response = response.split('### RESPONSE:')[1].strip()
-                break
-            except:
-                self.fail_num += 1
+        if logs is None:
+            while True:
+                try:
+                    if name in self.culprit:
+                        response = Api(Config.Culprit_Model).run_api(prompt_ask)
+                    else:
+                        response = Api(Config.Civilian_Model).run_api(prompt_ask)
+                    ask_response = response.split('### RESPONSE:')[1].strip()
+                    break
+                except:
+                    self.fail_num += 1
+        else:
+            logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+            prompt_ask_ = logs.pop(0)['Message']
+            response = logs.pop(0)['Message']
+            ask_response = response.split('### RESPONSE:')[1].strip()
         self.save_log('Env', prompt_ask, template='prompt_ask')
         self.save_log(item, response, template='prompt_ask')
         return ask_response
@@ -144,7 +161,7 @@ class BaseEnv:
         )
         while True:
             try:
-                response = Api(Config.Model).run_api(prompt_query)
+                response = Api(Config.Base_Model).run_api(prompt_query)
                 query_response = response.split('### RESPONSE:')[1].strip()
                 candidates[other_name]['query'] += int(query_response)
                 break
@@ -163,7 +180,7 @@ class BaseEnv:
         )
         while True:
             try:
-                response = Api(Config.Model).run_api(prompt_belief)
+                response = Api(Config.Base_Model).run_api(prompt_belief)
                 belief_response = response.split('### RESPONSE:')[1].strip()
                 candidates[other_name]['query'] -= int(belief_response)
                 break
@@ -172,7 +189,7 @@ class BaseEnv:
         self.save_log('Env', prompt_belief, template='prompt_belief')
         self.save_log('Agent', response, template='prompt_belief')
 
-    def script_summarize(self, name, content):
+    def script_summarize(self, name, content, logs):
         summarized_content = dict()
         for k, v in content.items():
             if 500 < token_calculate(v) < 4000:
@@ -181,13 +198,19 @@ class BaseEnv:
                     item=k,
                     content=v
                 )
-                while True:
-                    try:
-                        response = Api(Config.Model).run_api(prompt_script_summarize)
-                        summarized_content[k] = response.split('### RESPONSE:')[1].strip()
-                        break
-                    except:
-                        self.fail_num += 1
+                if logs is None:
+                    while True:
+                        try:
+                            response = Api(Config.Base_Model).run_api(prompt_script_summarize)
+                            summarized_content[k] = response.split('### RESPONSE:')[1].strip()
+                            break
+                        except:
+                            self.fail_num += 1
+                else:
+                    logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+                    prompt_script_summarize_ = logs.pop(0)['Message']
+                    response = logs.pop(0)['Message']
+                    summarized_content[k] = response.split('### RESPONSE:')[1].strip()
                 self.save_log('Env', prompt_script_summarize, template='prompt_script_summarize')
                 self.save_log('Env', response, template='prompt_script_summarize')
             elif token_calculate(v) > 4000:
@@ -200,13 +223,19 @@ class BaseEnv:
                         item=k,
                         content=s_content[:4000]
                     )
-                    while True:
-                        try:
-                            response = Api(Config.Model).run_api(prompt_script_summarize)
-                            splited_summarized_content.append(response.split('### RESPONSE:')[1].strip())
-                            break
-                        except:
-                            self.fail_num += 1
+                    if logs is None:
+                        while True:
+                            try:
+                                response = Api(Config.Base_Model).run_api(prompt_script_summarize)
+                                splited_summarized_content.append(response.split('### RESPONSE:')[1].strip())
+                                break
+                            except:
+                                self.fail_num += 1
+                    else:
+                        logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+                        prompt_script_summarize_ = logs.pop(0)['Message']
+                        response = logs.pop(0)['Message']
+                        splited_summarized_content.append(response.split('### RESPONSE:')[1].strip())
                     self.save_log('Env', prompt_script_summarize, template='prompt_script_summarize')
                     self.save_log('Env', response, template='prompt_script_summarize')
                     s_content = s_content[4000:]
@@ -218,20 +247,26 @@ class BaseEnv:
                     item=k,
                     content=sp_content
                 )
-                while True:
-                    try:
-                        response = Api(Config.Model).run_api(prompt_script_summarize)
-                        summarized_content[k] = response.split('### RESPONSE:')[1].strip()
-                        break
-                    except:
-                        self.fail_num += 1
+                if logs is None:
+                    while True:
+                        try:
+                            response = Api(Config.Base_Model).run_api(prompt_script_summarize)
+                            summarized_content[k] = response.split('### RESPONSE:')[1].strip()
+                            break
+                        except:
+                            self.fail_num += 1
+                else:
+                    logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+                    prompt_script_summarize_ = logs.pop(0)['Message']
+                    response = logs.pop(0)['Message']
+                    summarized_content[k] = response.split('### RESPONSE:')[1].strip()
                 self.save_log('Env', prompt_script_summarize, template='prompt_script_summarize')
                 self.save_log('Env', response, template='prompt_script_summarize')
             else:
                 summarized_content[k] = v
         return summarized_content
 
-    def init_stage(self):
+    def init_stage(self, logs):
         self.turns = 0
         for name, content in self.scripts.items():
             prompt_summary = self.prompt_summary_raw.format(
@@ -244,7 +279,7 @@ class BaseEnv:
                 others=content['其他能力']
             )
             if token_calculate(prompt_summary) > Config.MaxBaseScriptSummaryToken * 2:
-                summarized_content = self.script_summarize(name, content)
+                summarized_content = self.script_summarize(name, content, logs)
                 prompt_summary = self.prompt_summary_raw.format(
                     name=name,
                     background=summarized_content['人物故事'],
@@ -254,13 +289,19 @@ class BaseEnv:
                     mission=summarized_content['你的目的'],
                     others=summarized_content['其他能力']
                 )
-            while True:
-                try:
-                    response = Api(Config.Model).run_api(prompt_summary)
-                    summary_text = response.split('### RESPONSE:')[1].strip()
-                    break
-                except:
-                    self.fail_num += 1
+            if logs is None:
+                while True:
+                    try:
+                        response = Api(Config.Base_Model).run_api(prompt_summary)
+                        summary_text = response.split('### RESPONSE:')[1].strip()
+                        break
+                    except:
+                        self.fail_num += 1
+            else:
+                logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+                prompt_summary_ = logs.pop(0)['Message']
+                response = logs.pop(0)['Message']
+                summary_text = response.split('### RESPONSE:')[1].strip()
             self.save_log('Env', prompt_summary, template='prompt_base_summary')
             self.save_log(name, response, template='prompt_base_summary')
 
@@ -276,26 +317,49 @@ class BaseEnv:
             }
             self.address[name] = list(self.clues.keys())
 
-    def self_introduction_stage(self):
+    def self_introduction_stage(self, logs):
         for name, background in self.env_summary.items():
             prompt_introduction = self.prompt_introduction_raw.format(
                 name=name,
                 description=background,
                 self_clues=self.role_parameter[name]['self_clues']
             )
-            while True:
-                try:
-                    response = Api(Config.Model).run_api(prompt_introduction)
+            if logs is None:
+                while True:
+                    try:
+                        if name in self.culprit:
+                            response = Api(Config.Culprit_Model).run_api(prompt_introduction)
+                        else:
+                            response = Api(Config.Civilian_Model).run_api(prompt_introduction)
+                        introduction = response.split('### RESPONSE:')[1].strip()
+                        break
+                    except:
+                        self.fail_num += 1
+            else:
+                logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+                if logs[0]['Template'] == 'prompt_introduction':
+                    prompt_introduction_ = logs.pop(0)['Message']
+                    response = logs.pop(0)['Message']
                     introduction = response.split('### RESPONSE:')[1].strip()
-                    break
-                except:
-                    self.fail_num += 1
+                else:
+                    while True:
+                        try:
+                            if name in self.culprit:
+                                response = Api(Config.Culprit_Model).run_api(prompt_introduction)
+                            else:
+                                response = Api(Config.Civilian_Model).run_api(prompt_introduction)
+                            introduction = response.split('### RESPONSE:')[1].strip()
+                            break
+                        except:
+                            self.fail_num += 1
             self.save_log('Env', prompt_introduction, template='prompt_introduction')
             self.save_log(name, response, template='prompt_introduction')
 
             self.role_parameter[name]['last_action'].append(response)
 
             # query & belief Eval
+            logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+            logs = self.del_logs_with_template(logs, template='prompt_query')
             self.query(self.history_introduction, '', name, introduction, self.candidates)
             self.belief(self.history_introduction, '', name, introduction, self.candidates)
 
@@ -305,7 +369,7 @@ class BaseEnv:
 
         self.history_introduction = self.token_check(self.history_introduction) + '\n'
 
-    def converse_stage(self):
+    def converse_stage(self, logs):
         while self.turns < Config.MaxTurnNum:
             # converse
             print('**********Turn {}**********'.format(self.turns + 1))
@@ -322,36 +386,89 @@ class BaseEnv:
                     characters=list(self.scripts.keys()),
                     address=ls_address
                 )
-                while True:
+                if logs is None:
+                    while True:
+                        try:
+                            if name in self.culprit:
+                                response = Api(Config.Culprit_Model).run_api(prompt_converse)
+                            else:
+                                response = Api(Config.Civilian_Model).run_api(prompt_converse)
+                            history_converse = response.split('### RESPONSE:')[1].strip()
+                            action = re.findall('【(.*?)】【', history_converse, re.DOTALL)[0]
+                            item = re.findall('】【(.*?)】：', history_converse, re.DOTALL)[0]
+                            if action == '询问' and item not in self.env_summary.keys():
+                                raise ValueError('Unacceptable name!')
+                            elif action == '调查' and item not in self.clues.keys():
+                                raise ValueError('Unacceptable place!')
+                            elif action not in ['调查', '询问']:
+                                raise ValueError('Unaccepted action!')
+                            else:
+                                break
+                        except:
+                            self.fail_num += 1
+                else:
                     try:
-                        response = Api(Config.Model).run_api(prompt_converse)
+                        logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+                        prompt_converse_ = logs.pop(0)['Message']
+                        response = logs.pop(0)['Message']
                         history_converse = response.split('### RESPONSE:')[1].strip()
                         action = re.findall('【(.*?)】【', history_converse, re.DOTALL)[0]
                         item = re.findall('】【(.*?)】：', history_converse, re.DOTALL)[0]
                         if action == '询问' and item not in self.env_summary.keys():
-                            continue
+                            raise ValueError('Unacceptable name!')
                         elif action == '调查' and item not in self.clues.keys():
-                            continue
+                            raise ValueError('Unacceptable place!')
                         elif action not in ['调查', '询问']:
                             raise ValueError('Unaccepted action!')
-                        else:
-                            break
                     except:
-                        self.fail_num += 1
+                        while True:
+                            try:
+                                if name in self.culprit:
+                                    response = Api(Config.Culprit_Model).run_api(prompt_converse)
+                                else:
+                                    response = Api(Config.Civilian_Model).run_api(prompt_converse)
+                                history_converse = response.split('### RESPONSE:')[1].strip()
+                                action = re.findall('【(.*?)】【', history_converse, re.DOTALL)[0]
+                                item = re.findall('】【(.*?)】：', history_converse, re.DOTALL)[0]
+                                if action == '询问' and item not in self.env_summary.keys():
+                                    raise ValueError('Unacceptable name!')
+                                elif action == '调查' and item not in self.clues.keys():
+                                    raise ValueError('Unacceptable place!')
+                                elif action not in ['调查', '询问']:
+                                    raise ValueError('Unaccepted action!')
+                                else:
+                                    break
+                            except:
+                                self.fail_num += 1
                 self.save_log('Env', prompt_converse, template='prompt_converse')
                 self.save_log(name, response, template='prompt_converse')
 
                 # query & belief Eval
+                logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+                logs = self.del_logs_with_template(logs, template='prompt_query')
                 self.query(self.history_introduction, self.history, name, history_converse, self.candidates)
                 self.belief(self.history_introduction, self.history, name, history_converse, self.candidates)
 
                 if action == '调查':
-                    clue, task_history = self.get_clue(item)
+                    logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+                    logs = self.del_logs_with_template(logs, template='clue')
+                    if item in self.clues.keys():
+                        clue, task_history = self.get_clue(item)
+                    else:
+                        clue = '没有这条线索，你浪费了一次发言机会。'
+                        task_history = '【线索】【{item}】：{clue}'.format(
+                            item=item,
+                            clue=clue
+                        )
                     if Config.Console:
                         print(task_history + '\n')
                 elif action == '询问':
                     ask_content = re.findall('】：(.*)', history_converse, re.DOTALL)[0]
-                    task_history = self.ask(item, name, background, self.history_introduction, self.history, ask_content)
+                    task_history = self.ask(item, name, background, self.history_introduction, self.history, ask_content, logs)
+
+                    # query & belief Eval
+                    logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+                    logs = self.del_logs_with_template(logs, template='prompt_query')
                     self.query(self.history_introduction, self.history, item, task_history, self.candidates)
                     self.belief(self.history_introduction, self.history, item, task_history, self.candidates)
                 else:
@@ -373,7 +490,10 @@ class BaseEnv:
             )
             while True:
                 try:
-                    response = Api(Config.Model).run_api(prompt_vote)
+                    if name in self.culprit:
+                        response = Api(Config.Culprit_Model).run_api(prompt_vote)
+                    else:
+                        response = Api(Config.Civilian_Model).run_api(prompt_vote)
                     vote_response = response.split('### RESPONSE:')[1].strip()
                     try:
                         self.candidates[vote_response]['query'] += len(self.env_summary.keys()) * 1
@@ -403,22 +523,26 @@ class BaseEnv:
         print('\nFailure Number of Parsing: {}'.format(self.fail_num))
         self.save_n_log('Env', '\nFailure Number of Parsing: {}'.format(self.fail_num))
 
-    def run(self):
+    def run(self, path):
+        if path is None:
+            logs = None
+        else:
+            logs = read_json(path)
         print("******************************Start******************************")
 
         # Initial base environment
         print('********************Init Stage********************')
-        self.init_stage()
+        self.init_stage(logs)
         print('Init Stage Over...')
 
         # self-introduction
         print('********************Self-introduction Stage********************')
-        self.self_introduction_stage()
+        self.self_introduction_stage(logs)
         print('Self-introduction Stage Over...')
 
         # start converse
         print('********************Converse Stage********************')
-        self.converse_stage()
+        self.converse_stage(logs)
         print('Converse Stage Over...')
 
         # Vote Stage
@@ -441,7 +565,7 @@ class BaseEnv:
         self.logger.close()
         print("******************************Finish******************************")
 
-    def save_log(self, user, text, template, model=Config.Model):
+    def save_log(self, user, text, template, model=Config.Base_Model):
         if Config.Console:
             if user != 'Env' and 'query' not in template and 'clue' not in template and 'belief' not in template:
                 if 'eval' in template:

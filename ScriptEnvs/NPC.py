@@ -17,7 +17,7 @@ class NPC(BaseEnv):
         self.prompt_query = read_txt(Config.DataDir / script_name / 'self_prompts' / 'prompt_query.txt')
         self.prompt_belief = read_txt(Config.DataDir / script_name / 'self_prompts' / 'prompt_belief.txt')
 
-    def converse_stage(self):
+    def converse_stage(self, logs):
         while self.turns < Config.MaxTurnNum:
             # converse
             print('**********Turn {}**********'.format(self.turns + 1))
@@ -30,25 +30,67 @@ class NPC(BaseEnv):
                     last_action=self.role_parameter[name]['last_action'][-1],
                     characters=list(self.scripts.keys()),
                 )
-                while True:
+                if logs is None:
+                    while True:
+                        try:
+                            if name in self.culprit:
+                                response = Api(Config.Culprit_Model).run_api(prompt_converse)
+                            else:
+                                response = Api(Config.Civilian_Model).run_api(prompt_converse)
+                            history_converse = response.split('### RESPONSE:')[1].strip()
+                            action = re.findall('【(.*?)】【', history_converse, re.DOTALL)[0]
+                            item = re.findall('】【(.*?)】：', history_converse, re.DOTALL)[0]
+                            if action == '询问' and item not in self.env_summary.keys():
+                                raise ValueError('Unacceptable name!')
+                            elif action not in ['询问']:
+                                raise ValueError('Unaccepted action!')
+                            else:
+                                break
+                        except:
+                            self.fail_num += 1
+                else:
                     try:
-                        response = Api(Config.Model).run_api(prompt_converse)
+                        logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+                        prompt_converse_ = logs.pop(0)['Message']
+                        response = logs.pop(0)['Message']
                         history_converse = response.split('### RESPONSE:')[1].strip()
+                        action = re.findall('【(.*?)】【', history_converse, re.DOTALL)[0]
                         item = re.findall('】【(.*?)】：', history_converse, re.DOTALL)[0]
-                        break
+                        if action == '询问' and item not in self.env_summary.keys():
+                            raise ValueError('Unacceptable name!')
+                        elif action not in ['询问']:
+                            raise ValueError('Unaccepted action!')
                     except:
-                        self.fail_num += 1
+                        while True:
+                            try:
+                                if name in self.culprit:
+                                    response = Api(Config.Culprit_Model).run_api(prompt_converse)
+                                else:
+                                    response = Api(Config.Civilian_Model).run_api(prompt_converse)
+                                history_converse = response.split('### RESPONSE:')[1].strip()
+                                action = re.findall('【(.*?)】【', history_converse, re.DOTALL)[0]
+                                item = re.findall('】【(.*?)】：', history_converse, re.DOTALL)[0]
+                                if action == '询问' and item not in self.env_summary.keys():
+                                    raise ValueError('Unacceptable name!')
+                                elif action not in ['询问']:
+                                    raise ValueError('Unaccepted action!')
+                                else:
+                                    break
+                            except:
+                                self.fail_num += 1
                 self.save_log('Env', prompt_converse, template='prompt_converse')
                 self.save_log(name, response, template='prompt_converse')
 
                 ask_content = re.findall('】：(.*)', history_converse, re.DOTALL)[0]
-                task_history = self.ask(item, name, background, self.history_introduction, self.history, ask_content)
+                task_history = self.ask(item, name, background, self.history_introduction, self.history, ask_content, logs)
                 self.role_parameter[name]['last_action'].append(response + '\n' + name + '：' + task_history)
                 self.history += name + '：' + history_converse + '\n'
                 self.history += name + '：' + task_history + '\n'
                 self.history = self.token_check(self.history)
 
                 # query & belief Eval
+                logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+                logs = self.del_logs_with_template(logs, template='prompt_query')
                 for candidate_name in self.candidate_list:
                     self.self_query(self.history_introduction, self.history, candidate_name, self.candidates)
                     self.self_belief(self.history_introduction, self.history, candidate_name, self.candidates)
@@ -63,7 +105,7 @@ class NPC(BaseEnv):
         )
         while True:
             try:
-                response = Api(Config.Model).run_api(prompt_query)
+                response = Api(Config.Base_Model).run_api(prompt_query)
                 query_response = response.split('### RESPONSE:')[1].strip()
                 candidates[other_name]['query'] += int(query_response)
                 break
@@ -81,7 +123,7 @@ class NPC(BaseEnv):
         )
         while True:
             try:
-                response = Api(Config.Model).run_api(prompt_belief)
+                response = Api(Config.Base_Model).run_api(prompt_belief)
                 belief_response = response.split('### RESPONSE:')[1].strip()
                 candidates[other_name]['query'] -= int(belief_response)
                 break
@@ -90,7 +132,7 @@ class NPC(BaseEnv):
         self.save_log('Env', prompt_belief, template='prompt_belief')
         self.save_log('Agent', response, template='prompt_belief')
 
-    def select(self):
+    def select(self, logs):
         for name, background in self.env_summary.items():
             while True:
                 prompt_select = self.prompt_select_raw.format(
@@ -101,14 +143,56 @@ class NPC(BaseEnv):
                     last_action=self.role_parameter[name]['last_action'][-1],
                     address=list(self.clues.keys())
                 )
-                while True:
+                if logs is None:
+                    while True:
+                        try:
+                            if name in self.culprit:
+                                response = Api(Config.Culprit_Model).run_api(prompt_select)
+                            else:
+                                response = Api(Config.Civilian_Model).run_api(prompt_select)
+                            history_converse = response.split('### RESPONSE:')[1].strip()
+                            action = re.findall('【(.*?)】【', history_converse, re.DOTALL)[0]
+                            item = re.findall('】【(.*?)】：', history_converse, re.DOTALL)[0]
+                            if action == '调查' and item not in self.clues.keys():
+                                raise ValueError('Unacceptable place!')
+                            elif action not in ['调查']:
+                                raise ValueError('Unaccepted action!')
+                            else:
+                                break
+                        except:
+                            self.fail_num += 1
+                else:
                     try:
-                        response = Api(Config.Model).run_api(prompt_select)
+                        logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+                        prompt_select_ = logs.pop(0)['Message']
+                        response = logs.pop(0)['Message']
                         history_converse = response.split('### RESPONSE:')[1].strip()
+                        action = re.findall('【(.*?)】【', history_converse, re.DOTALL)[0]
                         item = re.findall('】【(.*?)】：', history_converse, re.DOTALL)[0]
-                        break
+                        if action == '调查' and item not in self.clues.keys():
+                            raise ValueError('Unacceptable place!')
+                        elif action not in ['调查']:
+                            raise ValueError('Unaccepted action!')
+                        else:
+                            break
                     except:
-                        self.fail_num += 1
+                        while True:
+                            try:
+                                if name in self.culprit:
+                                    response = Api(Config.Culprit_Model).run_api(prompt_select)
+                                else:
+                                    response = Api(Config.Civilian_Model).run_api(prompt_select)
+                                history_converse = response.split('### RESPONSE:')[1].strip()
+                                action = re.findall('【(.*?)】【', history_converse, re.DOTALL)[0]
+                                item = re.findall('】【(.*?)】：', history_converse, re.DOTALL)[0]
+                                if action == '调查' and item not in self.clues.keys():
+                                    raise ValueError('Unacceptable place!')
+                                elif action not in ['调查']:
+                                    raise ValueError('Unaccepted action!')
+                                else:
+                                    break
+                            except:
+                                self.fail_num += 1
                 if item not in self.clues.keys():
                     continue
                 else:
@@ -116,7 +200,16 @@ class NPC(BaseEnv):
             self.save_log('Env', prompt_select, template='prompt_converse')
             self.save_log(name, response, template='prompt_converse')
 
-            clue, task_history = self.get_clue(item)
+            logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+            logs = self.del_logs_with_template(logs, template='clue')
+            if item in self.clues.keys():
+                clue, task_history = self.get_clue(item)
+            else:
+                clue = '没有这条线索，你浪费了一次发言机会。'
+                task_history = '【线索】【{item}】：{clue}'.format(
+                    item=item,
+                    clue=clue
+                )
             if Config.Console:
                 print(task_history + '\n')
 
@@ -125,11 +218,18 @@ class NPC(BaseEnv):
             self.history += name + '：' + task_history + '\n'
             self.history = self.token_check(self.history)
 
+            # query & belief Eval
+            logs = self.del_logs_with_template(logs, template='prompt_history_summarize')
+            logs = self.del_logs_with_template(logs, template='prompt_query')
             for candidate_name in self.candidate_list:
                 self.self_query(self.history_introduction, self.history, candidate_name, self.candidates)
                 self.self_belief(self.history_introduction, self.history, candidate_name, self.candidates)
 
-    def run(self):
+    def run(self, path):
+        if path is None:
+            logs = None
+        else:
+            logs = read_json(path)
         print("******************************Start******************************")
 
         # NPC self-settings
@@ -160,7 +260,7 @@ class NPC(BaseEnv):
 
             # Initial base environment
             print('********************Init Stage********************')
-            self.init_stage()
+            self.init_stage(logs)
             print('Init Stage Over...')
 
             # change candidates
@@ -176,8 +276,8 @@ class NPC(BaseEnv):
 
             # start converse
             print('********************Converse Stage********************')
-            self.converse_stage()
-            self.select()
+            self.converse_stage(logs)
+            self.select(logs)
             print('Converse Stage Over...')
 
         # Vote Stage
