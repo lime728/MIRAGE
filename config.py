@@ -13,19 +13,29 @@ ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 class Config:
     # Manual Configs
     ScriptNumList = [0, 1, 2, 3, 4, 5, 6, 7]    # Chosen Script Numbers to run (From 0 to 7)  -- LOWER PRIORITY!
-    ScriptNum = 0                               # Chosen Script Number (From 0 to 7 and None) -- HIGHER PRIORITY!
+    ScriptNum = 7                               # Chosen Script Number (From 0 to 7 and None) -- HIGHER PRIORITY!
     MaxTurnNum = 5                              # Runnable Turn Number
     MaxRetries = 20                             # Max Retry in requests
     MaxBaseScriptSummaryToken = 1500            # Max token length of base script summary
     DEBUG = False                               # debug mode (Output all logs)
     Console = True                              # console mode (Only output conversation contents)
-    Model = 'gpt-3.5-turbo-0125'                # Api-based model
     force_summary = True                        # Use force summary or not
-    # Eval Configs
-    Eval_Model = 'gpt-4-turbo'                  # Eval Api-based model
     Only_Eval = False                           # Eval with exist history script
+    Query_Update = False                        # Update logs with new query rules
+
+    # Models
+    Base_Model = 'gpt-4-turbo'                  # Api-based model
+    Culprit_Model = 'gpt-3.5-turbo-0125'        # Api-based model
+    Civilian_Model = 'gpt-4o'                   # Api-based model
+
+    # Eval Models
+    Eval_Model = 'gpt-4-turbo'                  # Eval Api-based model
+
     # Exist history script for Eval
     OE_Path = ROOT / 'storage' / 'compare_gpt_4' / '东方之星号游轮事件_gpt_4' / 'history.json'
+
+    # Exist history script for Query Update
+    QU_Path = ROOT / 'storage' / 'log_2024_03_15_20_30_10_gpt_4_turbo' / '第二十二条校规' / 'history.json'
 
     # Base Directory
     DataDir = ROOT / 'dataset'

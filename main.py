@@ -8,11 +8,14 @@ def main():
     else:
         if Config.ScriptNum is not None:
             worker = MainWorker(Config.ScriptNum)
-            worker.run_env()
+            if Config.Query_Update:
+                worker.run_env(path=Config.QU_Path)
+            else:
+                worker.run_env(path=None)
         elif Config.ScriptNumList is not None:
             for worker_num in Config.ScriptNumList:
                 worker = MainWorker(worker_num)
-                worker.run_env()
+                worker.run_env(path=None)
         else:
             raise ValueError("'ScriptNum' or 'ScriptNumList' should be settled!")
 

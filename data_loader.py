@@ -97,6 +97,8 @@ def print_log(path, debug=False, console=True):
                 message=dialog['Message']
             ))
         elif console:
+            if dialog == logs[-1]:
+                continue
             if 'Failure' in dialog['Message']:
                 print('{name}: {message}'.format(
                     name=dialog['Name'],
@@ -147,6 +149,6 @@ def calculate_token(path):
 
 
 if __name__ == '__main__':
-    log_path = r'.\storage\compare_gpt_4\东方之星号游轮事件_gpt_4\history.json'
+    log_path = r'.\storage\base_1\gpt-4-turbo\东方之星号游轮事件\history.json'
     print_log(log_path, debug=False, console=True)
     # calculate_token(log_path)
