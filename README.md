@@ -44,7 +44,7 @@ First, Install requirements:
 ```bash
 pip install -r requirements.txt
 ```
-Second, Add your Api Key at [api.py](./api.py)
+Second, Add your Api Key at [config.py](./config.py)
 
 Finally, Start simulation:
 ```bash
