@@ -1,5 +1,5 @@
-# MPIRD-LLMA
-Multiverse Phantasm Interactive Role-play Dataset for Large Language Model Agents
+# MIRAGE
+**M**ultiverse **I**nteractive **R**ole-play **A**gent **G**eneral **E**valuation **(MIRAGE)**
 
 ## Introduction
 We provide a simulation for LLMs-Based-Agents to evaluate their behavior in a complex role-playing game such as in a mystery murder game.
