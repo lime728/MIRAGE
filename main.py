@@ -8,10 +8,7 @@ def main():
     else:
         if Config.ScriptNum is not None:
             worker = MainWorker(Config.ScriptNum)
-            if Config.Query_Update:
-                worker.run_env(path=Config.QU_Path)
-            else:
-                worker.run_env(path=None)
+            worker.run_env(path=None)
         elif Config.ScriptNumList is not None:
             for worker_num in Config.ScriptNumList:
                 worker = MainWorker(worker_num)
