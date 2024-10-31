@@ -4,16 +4,17 @@ import os
 import time
 
 FILE = Path(__file__).resolve()
-ROOT = FILE.parents[0]  # root directory
+ROOT = FILE.parents[0]                          # root directory
 if str(ROOT) not in sys.path:
-    sys.path.append(str(ROOT))  # add ROOT to PATH
+    sys.path.append(str(ROOT))                  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 
 class Config:
     # Manual Configs
     ScriptNumList = [0, 1, 2, 3, 4, 5, 6, 7]    # Chosen Script Numbers to run (From 0 to 7)  -- LOWER PRIORITY!
-    ScriptNum = 7                               # Chosen Script Number (From 0 to 7 and None) -- HIGHER PRIORITY!
+    ScriptNum = None                            # Chosen Script Number (From 0 to 7 and None) -- HIGHER PRIORITY!
+    Language = 'Zh'                             # Script Language: ['En', 'Zh']
     MaxTurnNum = 5                              # Runnable Turn Number
     MaxRetries = 20                             # Max Retry in requests
     MaxBaseScriptSummaryToken = 1500            # Max token length of base script summary
@@ -21,25 +22,54 @@ class Config:
     Console = True                              # console mode (Only output conversation contents)
     force_summary = True                        # Use force summary or not
     Only_Eval = False                           # Eval with exist history script
-    Query_Update = False                        # Update logs with new query rules
+    force_expose = False                        # Force to expose the culprits
 
     # Models
-    Base_Model = 'gpt-4-turbo'                  # Api-based model
-    Culprit_Model = 'gpt-3.5-turbo-0125'        # Api-based model
-    Civilian_Model = 'gpt-4o'                   # Api-based model
+    '''
+    Small Model:
+        Qwen2-7B-Instruct
+        Qwen1.5-7B-Chat
+        Qwen-7B-Chat
+        glm-4-9b-chat
+        Yi-1.5-9B-Chat
+    OpenAI Model:
+        gpt-4-turbo
+        gpt-3.5-turbo
+        gpt-4o
+    '''
+    Base_Model = 'Qwen2-7B-Instruct'            # Api-based model
+    Culprit_Model = 'Qwen2-7B-Instruct'         # Api-based model
+    Civilian_Model = 'Qwen2-7B-Instruct'        # Api-based model
 
     # Eval Models
-    Eval_Model = 'gpt-4-turbo'                  # Eval Api-based model
+    # Eval_Model = 'gpt-4-turbo'                  # Eval Api-based model
+    Eval_Model = 'Qwen2-7B-Instruct'                  # Eval Api-based model
+
+    # API
+    Small_LLM = [
+        'Qwen2-7B-Instruct',
+        'Qwen1.5-7B-Chat',
+        'Qwen-7B-Chat',
+        'glm-4-9b-chat',
+        'Yi-1.5-9B-Chat'
+    ]
+    ApiData = {
+        "OpenAI": {
+            "url": "<Your Url>",
+            "key": "<Your Key>"
+        },
+        "Qwen2-7B-Instruct": {
+            "url": "<Your Url>",
+            "key": "<Your Key>"
+        }
+    }
 
     # Exist history script for Eval
-    OE_Path = ROOT / 'storage' / 'compare_gpt_4' / '东方之星号游轮事件_gpt_4' / 'history.json'
-
-    # Exist history script for Query Update
-    QU_Path = ROOT / 'storage' / 'log_2024_03_15_20_30_10_gpt_4_turbo' / '第二十二条校规' / 'history.json'
+    OE_Path = None
 
     # Base Directory
-    DataDir = ROOT / 'dataset'
-    PromptDir = ROOT / 'prompts'
+    DataDir = ROOT / 'dataset' / Language
+    PromptDir = ROOT / 'prompts' / Language
     LogDir = ROOT / 'logs'
     if not os.path.exists(LogDir):
         os.makedirs(LogDir)
@@ -49,12 +79,21 @@ class Config:
 
     # Script Directories
     ScriptDirs = [path for path in DataDir.iterdir() if not path.name.endswith('.json')]
-    ScriptNames = [str(path).split('\\')[1] for path in DataDir.iterdir() if not path.name.endswith('.json')]
+    try:
+        # Windows
+        ScriptNames = [str(path).split('\\')[2] for path in DataDir.iterdir() if not path.name.endswith('.json')]
+    except:
+        # Linux
+        ScriptNames = [str(path).split('/')[2] for path in DataDir.iterdir() if not path.name.endswith('.json')]
     ScriptPaths = dict()
     for script in ScriptDirs:
         if not script.name.endswith('.json'):
-            ScriptPaths[str(script).split('\\')[1]] = [path for path in script.iterdir()]
-
+            try:
+                # Windows
+                ScriptPaths[str(script).split('\\')[2]] = [path for path in script.iterdir()]
+            except:
+                # Linux
+                ScriptPaths[str(script).split('/')[2]] = [path for path in script.iterdir()]
     # Prompt Paths
     PromptPaths = [path for path in PromptDir.iterdir()]
 
