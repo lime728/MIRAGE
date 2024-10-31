@@ -2,7 +2,6 @@ import json
 import tiktoken
 from datetime import datetime
 import pickle
-import re
 from rouge_chinese import Rouge
 import jieba
 
@@ -146,9 +145,3 @@ def calculate_token(path):
     print('Env Num: {}'.format(env_num))
     print('User Token: {}'.format(user_token_num))
     print('User Num: {}'.format(user_num))
-
-
-if __name__ == '__main__':
-    log_path = r'.\storage\base_1\gpt-4-turbo\东方之星号游轮事件\history.json'
-    print_log(log_path, debug=False, console=True)
-    # calculate_token(log_path)
