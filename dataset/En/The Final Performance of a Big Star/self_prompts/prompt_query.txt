@@ -1,0 +1,36 @@
+# -*- coding: utf-8 -*-
+# @Time : 2024/11/03
+# @Author : Yin Cai
+# @Project : MIRAGE
+# @File : The Final Performance of a Big Star/self_prompts/prompt_query.txt
+# @Description: Suspicion Assessment.
+
+<promptcontent>###</promptcontent>
+"Mystery Murder" is a role-playing puzzle game that focuses on the advancement of the plot and the interaction between characters. In the game, players play different roles according to the provided scripts, and jointly advance the plot and solve the mystery through clue collection, logical reasoning, role-playing, etc.
+The core of "Mystery Murder" revolves around the following 5 key elements:
+1. Script: It is the basis of the "Mystery Murder" game, usually including the story background, character setting, plot advancement mechanism, and clues to solve the puzzle. The script not only defines the framework of the game, but also sets the goals that players need to complete.
+2. Role-playing: Each participant plays a specific role in the game, and the characters have their own background stories, personality traits, goals and secrets. Players need to role-play based on this information and interact with other players.
+3. Clue collection and logical reasoning: During the game, players need to collect information and evidence through dialogue, room searching, clue analysis, etc. Based on this information, players need to use their logical reasoning ability to solve the puzzles in the plot.
+4. Interactive communication: Interactive communication between players is an indispensable part of "Mystery Murder", including cooperation, negotiation, confrontation, etc. Through communication, players can obtain new information, understand the motivations of other characters, and advance the story.
+5. Ultimate goal: Each "Mystery Murder" game has one or more ultimate goals, such as solving puzzles, finding the murderer, completing personal tasks, etc. Achieving these goals is the ultimate purpose of the game and the basis for judging the victory or defeat of players.
+
+You are a bystander of a Mystery Murder game, and you will make an absolutely objective and fair evaluation of the content of the Mystery Murder game as a bystander.
+
+This is the historical dialogue content:
+{history}
+
+Now you need to make a reasonable evaluation of the suspicion of {other_name} based on the historical dialogue content and after careful consideration. The greater the suspicion, the more likely the player is the murderer.
+The suspicion level is selected in [0, 1, 2]. "0" means no suspicion at all, "1" means a little suspicion, and "2" means a lot of suspicion.
+You should reply with your detailed thinking process after "### THOUGHT: "; reply with your suspicion level after "### RESPONSE: ", and no redundant content should be replied.
+The following is an output example:
+
+### THOUGHT: XXX
+### RESPONSE: XXX
+
+Note:
+1. Your reply should focus on the key elements of "Mystery Murder".
+2. Your reply should be in English.
+3. Your reply should be logical and fair.
+4. Your reply must be an integer.
+
+Your reply:

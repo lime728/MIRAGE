@@ -1,0 +1,65 @@
+{
+    "Corpse Information": [
+        "The deceased was wearing a white shirt, with significant bloodstains on the front from a gunshot.",
+        "There is a thin, long bloodstain on the back of the body.",
+        "In the pocket of the pants is the victim's phone. The phone contains chat records with Second Mate Zhang: \nMay 6 \nSecond Mate Zhang: You've been paying a little too much attention to me lately. Stop it. \nQi Liu: What? Don't talk nonsense. I'm not interested in you. It's you who should stop overthinking.\nAnd with Crew Member Han: \nMay 8 \nQi Liu: Come to my room to take something and help me deliver it. \nMay 9 \nQi Liu: Cook some ramen and bring it to my room quickly. \nMay 10 \nQi Liu: My stomach is upset. Cook some soup for me to cure my hangover. Also, there's a lot of dust; clean up the room. \nMay 11 \nQi Liu: I'm hungry. Cook some ramen.\nAnd with Singer Lin: \nApril 28 \nQi Liu: Let's go watch a movie. \nLin: I've already seen that one. \nQi Liu: I haven't told you which movie yet. \nQi Liu: Why did I meet you so late in life? \nLin: Because I was always avoiding you. \nMay 13, 19:45 \nLin: Where? Let's meet now. \nQi Liu: I'm in the warehouse. Come over.\nAnd with Manager Xiu: \nMarch 10 \nManager Xiu: Things were already slowing down, so why have they completely stopped now? \nQi Liu: Business isn't going well. What can I do? \nMay 13, 16:30 \nManager Xiu: If anything happens now, I won't sit idly by. Even if I end up in jail, I'll take you with me. Don't forget about the Y matter.\nMay 13, 16:41 \nQi Liu: It seems like there’s some misunderstanding. Let's talk about it later."
+    ],
+    "Warehouse": [
+        "There is a strange drink bottle next to the body, containing what seems like a peculiar liquid.",
+        "Around the body, there are many boxes of gunpowder. Upon opening the boxes, drugs are found inside.",
+        "The victim's suitcase contains a box of chocolates. The chocolates have drugs hidden inside."
+    ],
+    "Singer Lin's Room": [
+        "In the makeup bag, there is a letter: Proof of repayment for a debt of one million yuan. Debtor: Ruotong Lin. Paid on behalf by: Qi Liu on September 10, 2014.",
+        "In the gap of the speaker, there is an envelope: A dating contract signed by Qi Liu and Singer Lin. The contract states that each date would reduce the debt by 100,000 yuan, requiring 10 dates in total. Failure to comply would result in Singer Lin owing Qi Liu the full one million yuan.",
+        "In the wardrobe, there is a new Hermes handbag, and inside the bag is a gun without bullets.",
+        "In the wardrobe, there is a box containing a necklace and a small note: 'To my love, this is a token of my affection. Your Prince.'",
+        "There is a hairpin on the makeup table, with bloodstains on the tip.",
+        "In the dirty laundry basket, there is a torn performance costume."
+    ],
+    "Manager Xiu's Room": [
+        "There are many bottles of liquor on the table. One of them is a delicately packaged bottle of foreign wine. The packaging has been opened, and inside the box is a note saying, 'Let's resolve the misunderstanding and get along.' Upon closer inspection, there is a small needle hole on the bottle cap.",
+        "There is a silver cup on the table, which appears to have a slightly blackened color.",
+        "In the bedside table, there is Manager Xiu's passbook, showing that Qi Liu has been transferring 50,000 yuan to him every month.",
+        "In the cabinet under the table, there is a box containing a revolver with six bullets.",
+        "On the table, there is a candle that looks like it solidified not long ago."
+    ],
+    "Crew Member Han's Room": [
+        "There is a poster of Sherlock Holmes, and behind the poster is a photo of Qi Liu with many bullet holes in it.",
+        "In the bedside table, there is a box of chocolates, and it is known that the chocolates contain drugs.",
+        "There is a computer on the desk, with a video that was just uploaded to the internet. The video shows Second Mate Zhang being humiliated by a VVIP on the cruise ship (the VVIP was allergic to peanuts, and Zhang served a cold dessert containing peanuts). As the person responsible, Zhang kneeled to apologize.",
+        "In the laundry basket, there is a pair of men's underwear with the letters 'KJ' on it.",
+        "In the drawer, there is a toy gun and many BB pellets.",
+        "Under the table, there is a bottle of sulfuric acid.",
+        "In the wardrobe, there are many photos of Crew Member Han in ballet attire, dancing."
+    ],
+    "Second Mate Zhang's Room": [
+        "There is a 2014 contact list on the desk:\nCaptain: Yang Chenlin\nFirst Mate: Hong Zilian\nSecond Mate: Zhang Wenyuan\nThird Mate: Qi Liu.",
+        "In the first drawer of the desk, there is nicotine liquid.",
+        "A folder is found, documenting Qi Liu's mistakes at work and his blemishes, as well as a photocopy of the warehouse inventory list signed by Qi Liu, which should have been signed by Captain Hong according to regulations.",
+        "There is a photo of Zhang with the old captain Yang Chenlin, and on the back of the photo, it says 'Second Father.'",
+        "There is an ammunition distribution sheet showing that three bullets remain unused.",
+        "In the second drawer of the desk, there is a report regarding the VVIP incident, stating that Zhang was fired.",
+        "In the bedside table, there is a key (if the safe in the wheelhouse has been previously investigated, it can now be unlocked using this key)."
+    ],
+    "Captain's Room": [
+        "There is a private box containing an empty gun holster and some bullets.",
+        "In the drawer, there is a self-reflection letter written by Crew Member Han, acknowledging that she did not remain calm in the bar on May 6 and quarreled with others, affecting the customers.",
+        "In the second drawer, there are several bottles of nicotine solution.",
+        "In the trash can, there is a report from Second Mate Zhang accusing Qi Liu.",
+        "In Captain Hong's phone, there is a chat record with someone:\nWhat are we doing tomorrow? \nI want to go for a ride.\nOkay, good night, little yellow bird.\nGood night, do you want anything?\nYou..."
+    ],
+    "First Mate Liu's Room": [
+        "In the drawer, there is a passbook showing that Qi Liu received 200,000 yuan monthly and transferred 50,000 yuan to someone else.",
+        "In Qi Liu's wardrobe, there is a pair of men's underwear with the letters 'KJ' on it.",
+        "In the wardrobe drawer, there is a first aid kit containing a bottle of arsenic and a used syringe."
+    ],
+    "Bar": [
+        "On the counter, there are two boxes of identical chocolates, and it is known that the chocolates contain drugs."
+    ],
+    "Wheelhouse": [
+        "A locked safe is found with the inscription 'For emergency use of firearms.' The key is needed (the key is found in Second Mate Zhang's room, clue 7). Only after finding the key can the safe be opened, revealing a revolver with two bullets inside.",
+        "In the hidden compartment under the floor, there is a box that requires a four-digit code to open (the puzzle image is in another document; at this time, show the image to the player searching the area, and they can take a picture. After solving the puzzle, tell the player the answer is 8792). After solving the puzzle, the box is opened, revealing six tarot cards faxed over, with the contents: \nThe first card is the Captain.\nThe second card is a Secret Deal.\nThe third card is Betrayal.\nThe fourth card is a Meeting.\nThe fifth card is the Port.\nThe sixth card is Kill.\nThe fax date is May 13, 19:40."
+    ]
+}
+  
