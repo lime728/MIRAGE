@@ -32,7 +32,7 @@ class MainWorker:
         elif self.ScriptName == "漓川怪谈簿" or self.ScriptName == 'Li Chuan Strange Talk Book':
             self.ScriptEnv = SUO.SUO(self.ScriptName, self.ScriptFiles)
         # ScriptNum 6
-        elif self.ScriptName == "狐狸旅馆" or self.ScriptName == 'Bride in Filial Dress':
+        elif self.ScriptName == "狐狸旅馆" or self.ScriptName == 'Fox Hotel':
             self.ScriptEnv = MUO.MUO(self.ScriptName, self.ScriptFiles)
         # ScriptNum 7
         elif self.ScriptName == "第二十二条校规" or self.ScriptName == 'Article 22 School Rules':
