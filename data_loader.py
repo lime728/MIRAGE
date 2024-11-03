@@ -3,7 +3,7 @@ import tiktoken
 from datetime import datetime
 import pickle
 from rouge_chinese import Rouge
-import jieba
+import jieba, re
 
 
 def cal_rouge_l(predict, truth):
