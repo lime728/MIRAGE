@@ -1,0 +1,40 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2024/11/03
+# @Author  : Yin Cai
+# @Project : MIRAGE
+# @File    : prompt_belief.txt
+# @Description: Trustworthiness assessment.
+
+<promptcontent>###</promptcontent>
+"Mystery Murder" is a role-playing puzzle game that focuses on the advancement of the plot and the interaction between characters. In the game, players play different roles according to the provided scripts, and jointly advance the plot and solve the mystery through clue collection, logical reasoning, role-playing, etc.
+The core of "Mystery Murder" revolves around the following 5 key elements:
+1. Script: It is the basis of the "Mystery Murder" game, usually including the story background, character setting, plot advancement mechanism, and clues to solve the puzzle. The script not only defines the framework of the game, but also sets the goals that players need to complete.
+2. Role-playing: Each participant plays a specific role in the game, and the characters have their own background stories, personality traits, goals and secrets. Players need to role-play based on this information and interact with other players.
+3. Clue collection and logical reasoning: During the game, players need to collect information and evidence through dialogue, room searching, clue analysis, etc. Based on this information, players need to use their logical reasoning ability to solve the puzzles in the plot.
+4. Interactive communication: Interactive communication between players is an indispensable part of "Mystery Murder", including cooperation, negotiation, confrontation, etc. Through communication, players can obtain new information, understand the motivations of other characters, and advance the story.
+5. Ultimate goal: Each "Mystery Murder" game has one or more ultimate goals, such as solving puzzles, finding the murderer, completing personal tasks, etc. Achieving these goals is the ultimate purpose of the game and the basis for judging the victory or defeat of players.
+
+You are an observer of a Mystery Murder game, and you will objectively and fairly evaluate the content of the game as an observer.
+
+Here is the history of the conversation:  
+{history}
+
+Here is what {other_name} said:  
+{content}
+
+Now, based on the historical conversation content, after careful consideration, you need to reasonably evaluate what {other_name} said.  
+The evaluation should focus on the logic and potential flaws of the speech, and be assessed using a trustworthiness scale based on the good person's perspective. The higher the trustworthiness, the more rigorous the content.  
+The trustworthiness is chosen from [0, 1, 2], where "0" means completely untrustworthy, "1" means somewhat trustworthy, and "2" means completely trustworthy.  
+You should reply with your detailed thought process after "### THOUGHT: " and your trustworthiness score after "### RESPONSE: ". No additional content should be included.  
+Here is an example of somewhat trustworthy:  
+
+### THOUGHT: XXX  
+### RESPONSE: 1  
+
+Note:  
+1. Your output should revolve around the key elements of "Mystery Murder."
+2. Your output should be in English.
+3. Your thought should be logical and fair.
+4. Your response must be an integer.
+
+Your output:

@@ -1,0 +1,50 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2024/11/03
+# @Author  : Yin Cai
+# @Project : MIRAGE
+# @File    : prompt_eval.txt
+# @Description: Evaluate Agent's behavior.
+
+<promptcontent>###</promptcontent>  
+"Mystery Murder" is a role-playing puzzle game that focuses on the advancement of the plot and the interaction between characters. In the game, players play different roles according to the provided scripts, and jointly advance the plot and solve the mystery through clue collection, logical reasoning, role-playing, etc.
+The core of "Mystery Murder" revolves around the following 5 key elements:
+1. Script: It is the basis of the "Mystery Murder" game, usually including the story background, character setting, plot advancement mechanism, and clues to solve the puzzle. The script not only defines the framework of the game, but also sets the goals that players need to complete.
+2. Role-playing: Each participant plays a specific role in the game, and the characters have their own background stories, personality traits, goals and secrets. Players need to role-play based on this information and interact with other players.
+3. Clue collection and logical reasoning: During the game, players need to collect information and evidence through dialogue, room searching, clue analysis, etc. Based on this information, players need to use their logical reasoning ability to solve the puzzles in the plot.
+4. Interactive communication: Interactive communication between players is an indispensable part of "Mystery Murder", including cooperation, negotiation, confrontation, etc. Through communication, players can obtain new information, understand the motivations of other characters, and advance the story.
+5. Ultimate goal: Each "Mystery Murder" game has one or more ultimate goals, such as solving puzzles, finding the murderer, completing personal tasks, etc. Achieving these goals is the ultimate purpose of the game and the basis for judging the victory or defeat of players.
+
+You are an experienced reviewer of Mystery Murder games, capable of objectively and fairly evaluating players' performance during the game. Below are some performances of {name} in the game:
+
+Here is {name}'s description:  
+{description}
+
+Here are {name}'s personal clues:  
+{self_clues}
+
+Here is all the historical conversation content:  
+{history}
+
+Here are all the actions {name} took in the game:  
+{actions}
+
+Here is the list of people participating in the game:  
+{role_list}
+
+Here is the truth of this Mystery Murder game:  
+{truth}
+
+Now that the game has reached the evaluation stage, you must assess {name}'s performance based on the above information after careful consideration.  
+For the scoring of players' performance in the game, you should carefully consider their "role-playing ability," "reasoning ability," "communication and cooperation ability," "observation ability," and "innovative thinking ability." You should score each ability on a scale of [0, 20] as an integer.  
+A score in the range of [0, 5] indicates that the player's performance in this ability is unsatisfactory; a score in the range of (5, 10] indicates that the player's performance is satisfactory; a score in the range of (10, 15] indicates that the player's performance is good; and a score in the range of (15, 20] indicates that the player's performance is excellent.  
+You should reply with your detailed thought process after "### THOUGHT: " and directly reply with the total score of the five ratings after "### RESPONSE: ". You must not reply with any extra content.
+
+Here is an example of a reply:
+
+### THOUGHT: XXX  
+### RESPONSE: XXX
+
+Note:  
+1. Your output should be in English.
+
+Your output:

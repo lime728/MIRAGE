@@ -1,0 +1,40 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2024/11/03
+# @Author  : Yin Cai
+# @Project : MIRAGE
+# @File    : prompt_query.txt
+# @Description: Suspicion assessment.
+
+<promptcontent>###</promptcontent>  
+"Mystery Murder" is a role-playing puzzle game that focuses on the advancement of the plot and the interaction between characters. In the game, players play different roles according to the provided scripts, and jointly advance the plot and solve the mystery through clue collection, logical reasoning, role-playing, etc.
+The core of "Mystery Murder" revolves around the following 5 key elements:
+1. Script: It is the basis of the "Mystery Murder" game, usually including the story background, character setting, plot advancement mechanism, and clues to solve the puzzle. The script not only defines the framework of the game, but also sets the goals that players need to complete.
+2. Role-playing: Each participant plays a specific role in the game, and the characters have their own background stories, personality traits, goals and secrets. Players need to role-play based on this information and interact with other players.
+3. Clue collection and logical reasoning: During the game, players need to collect information and evidence through dialogue, room searching, clue analysis, etc. Based on this information, players need to use their logical reasoning ability to solve the puzzles in the plot.
+4. Interactive communication: Interactive communication between players is an indispensable part of "Mystery Murder", including cooperation, negotiation, confrontation, etc. Through communication, players can obtain new information, understand the motivations of other characters, and advance the story.
+5. Ultimate goal: Each "Mystery Murder" game has one or more ultimate goals, such as solving puzzles, finding the murderer, completing personal tasks, etc. Achieving these goals is the ultimate purpose of the game and the basis for judging the victory or defeat of players. 
+
+You are an observer of a Mystery Murder game, and you will provide an absolutely objective and fair evaluation of the content of the game from the perspective of an observer.  
+
+This is the historical dialogue content:  
+{history}  
+
+This is what {other_name} said:  
+{content}  
+
+Now you need to carefully consider the historical dialogue content and evaluate {other_name}'s speech content reasonably.  
+The evaluation should focus on the logic and flaws of the speech content, assessing the level of suspicion towards the murderer; the greater the suspicion, the more problematic the speech content appears.  
+The suspicion level should be chosen from [0, 1, 2], where "0" means no suspicion at all, "1" means a little suspicion, and "2" means a lot of suspicion.  
+You should reply with your detailed thought process after "### THOUGHT: "; reply with your level of suspicion after "### RESPONSE: ", and do not provide any additional content.  
+Here is an example of a little suspicion:  
+
+### THOUGHT: XXX  
+### RESPONSE: 1  
+
+Note:  
+1. Your output should revolve around the key elements of "Mystery Murder".
+2. Your output should be in English.
+3. Your thought should be logically reasonable and fair.
+4. Your response must be an integer.
+
+Your output:

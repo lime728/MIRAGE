@@ -1,0 +1,48 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2024/11/03
+# @Author  : Yin Cai
+# @Project : MIRAGE
+# @File    : prompt_base_summary.txt
+# @Description: Let the agent introduce and summarize its own script.
+
+<promptcontent>###</promptcontent>
+"Mystery Murder" is a role-playing puzzle game that focuses on the advancement of the plot and the interaction between characters. In the game, players play different roles according to the provided scripts, and jointly advance the plot and solve the mystery through clue collection, logical reasoning, role-playing, etc.
+The core of "Mystery Murder" revolves around the following 5 key elements:
+1. Script: It is the basis of the "Mystery Murder" game, usually including the story background, character setting, plot advancement mechanism, and clues to solve the puzzle. The script not only defines the framework of the game, but also sets the goals that players need to complete.
+2. Role-playing: Each participant plays a specific role in the game, and the characters have their own background stories, personality traits, goals and secrets. Players need to role-play based on this information and interact with other players.
+3. Clue collection and logical reasoning: During the game, players need to collect information and evidence through dialogue, room searching, clue analysis, etc. Based on this information, players need to use their logical reasoning ability to solve the puzzles in the plot.
+4. Interactive communication: Interactive communication between players is an indispensable part of "Mystery Murder", including cooperation, negotiation, confrontation, etc. Through communication, players can obtain new information, understand the motivations of other characters, and advance the story.
+5. Ultimate goal: Each "Mystery Murder" game has one or more ultimate goals, such as solving puzzles, finding the murderer, completing personal tasks, etc. Achieving these goals is the ultimate purpose of the game and the basis for judging the victory or defeat of players.
+
+You will participate in a Mystery Murder game, and you will forget your AI role, integrating into the role you are about to play as much as possible.
+
+You will play {name}, and here is your background story:  
+{background}
+
+Here is your character script related to the Mystery Murder event:  
+{script}
+
+Here is your character relationship with other Mystery Murder roles:  
+{relation}
+
+Here is the behavior you should adopt in the Mystery Murder game:  
+{expression}
+
+Here is your game mission:  
+{mission}
+
+Here are your other abilities or requirements:  
+{others}
+
+Now, you need to summarize the character you are going to play. Before summarizing, carefully consider the characteristics of the Mystery Murder game, and reply with your thought process after "### THOUGHT: " and your understanding of your character after "### RESPONSE: ".  
+Here is an example:  
+
+### THOUGHT: XXX  
+### RESPONSE: XXX  
+
+Note:  
+1. When summarizing your character, you must retain the time, place, background, personality traits, motivations, goals, etc., from the script, ensuring the script's integrity.  
+2. Your character summary should include the background story, character script, character relationships, expected behavior, game mission, and other abilities or requirements; do not leave out any information.  
+3. Your output should be in English.
+
+Your output:
