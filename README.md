@@ -8,26 +8,26 @@ In our simulation, we provide **8** different scripts and **3** evaluation metho
 
 Here is a table of information of our scripts:
 
-| ID | Name                               | Structure | Type       | Ending | #Stages | #Agents | #Words_zh |
-| -- | ---------------------------------- | --------- | ---------- | ------ | ------- | ------- | --------- |
-| 0 | Bride in filial dress               | Single    | Orthodox   | Close  | 1       | 10      | 45,475    |
-| 1 | The Eastern Star cruise ship        | Single    | Orthodox   | Open   | 1       | 5       | 5,619     |
-| 2 | Night at the Museum                 | Single    | Unorthodox | Close  | 1       | 6       | 13,849    |
-| 3 | Li Chuan strange talk book          | Single    | Unorthodox | Open   | 1       | 7       | 79,012    |
-| 4 | The final performance of a big star | Multi     | Orthodox   | Close  | 7       | 2       | 11,288    |
-| 5 | Raging Sea of Rest Life             | Multi     | Orthodox   | Open   | 2       | 6       | 18,443    |
-| 6 | Article 22 School Rules             | Multi     | Unorthodox | Close  | 5       | 7       | 91,532    |
-| 7 | Fox Hotel                           | Multi     | Unorthodox | Open   | 2       | 7       | 107,057   |
+| ID | Name                               | Structure | Type       | Ending | #Stages | #Agents | #Words_zh | #Words_en |
+| -- | ---------------------------------- | --------- | ---------- | ------ | ------- | ------- | --------- | --------- |
+| 0 | Bride in filial dress               | Single    | Orthodox   | Close  | 1       | 10      | 45,475    | /         |
+| 1 | The Eastern Star cruise ship        | Single    | Orthodox   | Open   | 1       | 5       | 5,619     | /         |
+| 2 | Night at the Museum                 | Single    | Unorthodox | Close  | 1       | 6       | 13,849    | /         |
+| 3 | Li Chuan strange talk book          | Single    | Unorthodox | Open   | 1       | 7       | 79,012    | /         |
+| 4 | The final performance of a big star | Multi     | Orthodox   | Close  | 7       | 2       | 11,288    | /         |
+| 5 | Raging Sea of Rest Life             | Multi     | Orthodox   | Open   | 2       | 6       | 18,443    | /         |
+| 6 | Article 22 School Rules             | Multi     | Unorthodox | Close  | 5       | 7       | 91,532    | /         |
+| 7 | Fox Hotel                           | Multi     | Unorthodox | Open   | 2       | 7       | 107,057   | /         |
 
-We provide 3 proper evaluation methods: **LLM Score**, **Rouge-L Metric** and **FII (Falsification Inclination Index)**.
+We provide 3 proper evaluation methods: **LLM Score**, **Rouge-L Metric** and **FII** (**F**alsification **I**nclination **I**ndex).
 
 Here is a average result of Script **The Eastern Star cruise ship** based on **GPT-4-Turbo** for evaluation:
 
-| Base_Model | LLM_Score | Rouge_L |
-| ---------- | --------- | ------- |
-| GPT-3.5    | 78.2      | 0.253   |
-| GPT-4      | 76.4      | 0.259   |
-| GPT-4o     | 77.0      | 0.161   |
+| Base-Model | LLM-Score | Rouge-L | FII     |
+| ---------- | --------- | ------- | ------- |
+| GPT-3.5    | 78.2      | 0.253   | /       |
+| GPT-4      | 76.4      | 0.259   | /       |
+| GPT-4o     | 77.0      | 0.161   | /       |
 
 All configs can be found in [config.py](./config.py)
 
