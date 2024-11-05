@@ -4,7 +4,7 @@
 ## Introduction
 We provide a simulation for LLMs-Based-Agents to evaluate their behavior in a complex role-playing game such as in a mystery murder game.
 
-In our simulation, we provide **8** different scripts and **2** evaluation methods.
+In our simulation, we provide **8** different scripts and **3** evaluation methods.
 
 Here is a table of information of our scripts:
 
@@ -19,7 +19,7 @@ Here is a table of information of our scripts:
 | 6 | Article 22 School Rules             | Multi     | Unorthodox | Close  | 5       | 7       | 91,532    |
 | 7 | Fox Hotel                           | Multi     | Unorthodox | Open   | 2       | 7       | 107,057   |
 
-We provide 2 proper evaluation methods: **LLM_Score** and **Rouge_L**.
+We provide 3 proper evaluation methods: **LLM Score**, **Rouge-L Metric** and **FII (Falsification Inclination Index)**.
 
 Here is a average result of Script **The Eastern Star cruise ship** based on **GPT-4-Turbo** for evaluation:
 
