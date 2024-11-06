@@ -25,9 +25,9 @@ Here is a average result of Script **The Eastern Star cruise ship** based on **G
 
 | Base-Model | LLM-Score | Rouge-L | FII     |
 | ---------- | --------- | ------- | ------- |
-| GPT-3.5    | 78.2      | 0.253   | /       |
-| GPT-4      | 76.4      | 0.259   | /       |
-| GPT-4o     | 77.0      | 0.161   | /       |
+| GPT-3.5    | 78.2      | 0.253   | 0.472   |
+| GPT-4      | 76.4      | 0.259   | 0.246   |
+| GPT-4o     | 77.0      | 0.161   | 0.503   |
 
 All configs can be found in [config.py](./config.py)
 
