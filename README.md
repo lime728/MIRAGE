@@ -23,20 +23,13 @@ We provide 3 proper evaluation methods: **LLM Score**, **Rouge-L Metric** and **
 
 Here is a average result of Script **The Eastern Star cruise ship** based on **GPT-4-Turbo** for evaluation:
 
-| Base-Model | LLM-Score | Rouge-L | FII     |
-| ---------- | --------- | ------- | ------- |
-| GPT-3.5    | 78.2      | 0.253   | 0.472   |
-| GPT-4      | 76.4      | 0.259   | 0.246   |
-| GPT-4o     | 77.0      | 0.161   | 0.503   |
+| Base-Model         | LLM-Score | Rouge-L | FII     |
+| ------------------ | --------- | ------- | ------- |
+| gpt-3.5-turbo-0125 | 78.2      | 0.253   | 0.472   |
+| gpt-4              | 76.4      | 0.259   | 0.246   |
+| gpt-4o             | 77.0      | 0.161   | 0.503   |
 
 All configs can be found in [config.py](./config.py)
-
-## Attention
-The cost of **Context** Tokens of Script **The Eastern Star cruise ship** is 716,440->7.1644 USD.
-
-The cost of **Completion** Tokens of Script **The Eastern Star cruise ship** is 53,630->1.6089 USD.
-
-Take **GPT-4** as an example, 8 Scripts costs about **600** USD.
 
 ## Quick Start
 ### Requirements
