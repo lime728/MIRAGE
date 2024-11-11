@@ -40,7 +40,7 @@ Here is a complete result of All Scripts:
 
 Here is an average result of Script **The Eastern Star cruise ship** based on **gpt-4-turbo** for evaluation:
 
-| Base-Model         | LLM-Score | Rouge-L | FII     |
+| Model         | LLM-Score | Rouge-L | FII     |
 | ------------------ | --------- | ------- | ------- |
 | gpt-3.5-turbo-0125 | 78.2      | 0.253   | 0.472   |
 | gpt-4              | 76.4      | 0.259   | 0.246   |
