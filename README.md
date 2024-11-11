@@ -21,7 +21,24 @@ Here is a table of information of our scripts:
 
 We provide 3 proper evaluation methods: **LLM Score**, **Rouge-L Metric** and **FII** (**F**alsification **I**nclination **I**ndex).
 
-Here is a average result of Script **The Eastern Star cruise ship** based on **GPT-4-Turbo** for evaluation:
+Here is a complete result of All Scripts:
+
+| Base Model         | Judge Model        | Culprit Model      | Civilian Model      | Eval Model  | Env Tokens / Envs | User Tokens / Users | #Failure | #Clues | Culprit Victory | LLM-Score | Rouge-L | FII   |
+| ------------------ | ------------------ | ------------------ | ------------------- | ----------- | ----------------- | ------------------- | -------- | ------ | --------------- | --------- | ------- | ----- |
+| gpt-3.5-turbo-0125 | gpt-3.5-turbo-0125 | gpt-3.5-turbo-0125 | gpt-3.5-turbo-0125  | gpt-4-turbo | 2,356,042 / 876   | 97,863 / 542        | 5.4      | 7.0    | 87.50 / 84.94   | 78.7      | 0.242   | 0.459 |
+| gpt-4-turbo        | gpt-4-turbo        | gpt-4-turbo        | gpt-4-turbo         | gpt-4-turbo | 2,085,857 / 723   | 204,997 / 544       | 6.4      | 5.6    | 100.00 / 84.94  | 83.9      | 0.244   | 0.204 |
+| Qwen2-7B-Instruct  | Qwen2-7B-Instruct  | Qwen2-7B-Instruct  | Qwen2-7B-Instruct   | gpt-4-turbo | 1,664,279 / 684   | 183,536 / 548       | 7.3      | 3.7    | 87.50 / 84.94   | 83.8      | 0.251   | 0.116 |
+| glm-4-9b-chat      | glm-4-9b-chat      | glm-4-9b-chat      | glm-4-9b-chat       | gpt-4-turbo | 2,978,766 / 1,153 | 150,108 / 544       | 24.4     | 5.7    | 75.00 / 84.94   | 84.0      | 0.218   | 0.411 |
+| Qwen2-7B-Instruct  | Qwen2-7B-Instruct  | Qwen2-7B-Instruct  | Qwen-7B-Chat        | gpt-4-turbo | /                 | /                   | 180.1    | /      | /               | 82.1      | 0.234   | 0.217 |
+| Qwen2-7B-Instruct  | Qwen2-7B-Instruct  | Qwen2-7B-Instruct  | Qwen1.5-7B-Instruct | gpt-4-turbo | /                 | /                   | 41.1     | /      | /               | 84.6      | 0.233   | 0.210 |
+| Qwen2-7B-Instruct  | Qwen2-7B-Instruct  | Qwen2-7B-Instruct  | Yi-1.5-9B-Chat      | gpt-4-turbo | /                 | /                   | 57.8     | /      | /               | 82.4      | 0.233   | 0.230 |
+| Qwen2-7B-Instruct  | Qwen2-7B-Instruct  | Qwen2-7B-Instruct  | glm-4-9b-chat       | gpt-4-turbo | /                 | /                   | 17.3     | /      | /               | 82.4      | 0.247   | 0.243 |
+| Qwen2-7B-Instruct  | /                  | Qwen2-7B-Instruct  | Qwen-7B-Chat        | gpt-4-turbo | /                 | /                   | 218.9    | /      | /               | 80.9      | 0.247   | 0.385 |
+| Qwen2-7B-Instruct  | /                  | Qwen2-7B-Instruct  | Qwen1.5-7B-Instruct | gpt-4-turbo | /                 | /                   | 94.3     | /      | /               | 85.2      | 0.240   | 0.219 |
+| Qwen2-7B-Instruct  | /                  | Qwen2-7B-Instruct  | Yi-1.5-9B-Chat      | gpt-4-turbo | /                 | /                   | 1481.0   | /      | /               | 84.1      | 0.248   | 0.369 |
+| Qwen2-7B-Instruct  | /                  | Qwen2-7B-Instruct  | glm-4-9b-chat       | gpt-4-turbo | /                 | /                   | 51.4     | /      | /               | 82.6      | 0.237   | 0.307 |
+
+Here is an average result of Script **The Eastern Star cruise ship** based on **gpt-4-turbo** for evaluation:
 
 | Base-Model         | LLM-Score | Rouge-L | FII     |
 | ------------------ | --------- | ------- | ------- |
