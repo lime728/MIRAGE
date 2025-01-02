@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# @Time    : 2024/11/03
+# @Time    : 2025/01/02
 # @Author  : Yin Cai
 # @Project : MIRAGE
 # @File    : prompt_eval.txt
@@ -34,9 +34,9 @@ Here is the list of people participating in the game:
 Here is the truth of this Mystery Murder game:  
 {truth}
 
-Now that the game has reached the evaluation stage, you must assess {name}'s performance based on the above information after careful consideration.  
-For the scoring of players' performance in the game, you should carefully consider their "role-playing ability," "reasoning ability," "communication and cooperation ability," "observation ability," and "innovative thinking ability." You should score each ability on a scale of [0, 20] as an integer.  
-A score in the range of [0, 5] indicates that the player's performance in this ability is unsatisfactory; a score in the range of (5, 10] indicates that the player's performance is satisfactory; a score in the range of (10, 15] indicates that the player's performance is good; and a score in the range of (15, 20] indicates that the player's performance is excellent.  
+Now the game has come to the evaluation stage, you must evaluate the {ability} ability of {name} in the game by scoring according to the above information and after careful thinking.
+Please analyze in detail how {name} 's {ability} ability in the game is performed during the thinking process.
+The ability rating range is an integer of [0, 20]. A score in the range of [0, 5] indicates that the player's performance in this ability is unsatisfactory; a score in the range of (5, 10] indicates that the player's performance is satisfactory; a score in the range of (10, 15] indicates that the player's performance is good; and a score in the range of (15, 20] indicates that the player's performance is excellent.
 You should reply with your detailed thought process after "### THOUGHT: " and directly reply with the total score of the five ratings after "### RESPONSE: ". You must not reply with any extra content.
 
 Here is an example of a reply:

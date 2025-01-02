@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# @Time    : 2024/11/03
+# @Time    : 2025/01/02
 # @Author  : Yin Cai
 # @Project : MIRAGE
 # @File    : prompt_script_summarize.txt
@@ -12,9 +12,19 @@ The core of "Mystery Murder" revolves around the following 5 key elements:
 2. Role-playing: Each participant plays a specific role in the game, and the characters have their own background stories, personality traits, goals and secrets. Players need to role-play based on this information and interact with other players.
 3. Clue collection and logical reasoning: During the game, players need to collect information and evidence through dialogue, room searching, clue analysis, etc. Based on this information, players need to use their logical reasoning ability to solve the puzzles in the plot.
 4. Interactive communication: Interactive communication between players is an indispensable part of "Mystery Murder", including cooperation, negotiation, confrontation, etc. Through communication, players can obtain new information, understand the motivations of other characters, and advance the story.
-5. Ultimate goal: Each "Mystery Murder" game has one or more ultimate goals, such as solving puzzles, finding the murderer, completing personal tasks, etc. Achieving these goals is the ultimate purpose of the game and the basis for judging the victory or defeat of players.  
+5. Ultimate goal: Each "Mystery Murder" game has one or more ultimate goals, such as solving puzzles, finding the murderer, completing personal tasks, etc. Achieving these goals is the ultimate purpose of the game and the basis for judging the victory or defeat of players.
 
-The {item} of character {name} is:  
+Each character in the "Mystery Murder" game is given a script before starting, and each script contains six parts: Story, Script, Relationship, Performance, Purpose, and Ability.
+1. Story generally contains the basic information of the character, such as name, gender, etc., as well as the background story of the character, such as the personal experience before the killing event in the script.
+2. Script usually contains the actions of the character in the script killing event.
+3. Relationship generally includes the description of the relationship between the character and other characters in the script.
+4. Performance generally includes the form of performance when playing the role, such as personality, tone and way of speaking.
+5. Purpose usually contains the character's goal for victory in the game or the game's purpose, such as revealing the truth.
+6. Ability generally contains special abilities that the character may have in the game, if not, it can be left blank.
+
+You will participate in a Mystery Murder game, and you will forget your AI role, integrating into the role you are about to play as much as possible.
+
+The {part} of character {name} is:
 {content}  
 
 Now please summarize the above content. Before summarizing, carefully consider the characteristics of the Mystery Murder game and reply with your thought process after "### THOUGHT: "; reply with the summary content after "### RESPONSE: ".  
@@ -24,7 +34,7 @@ Here is an example:
 ### RESPONSE: XXX  
 
 Note:  
-1. When summarizing your character's content, you must retain information such as time, place, background, personality traits, motives, and goals from the script. You must preserve the integrity of the script without omitting any information;  
+1. When summarizing your character's content, you must retain information such as time, place, background from the script;
 2. Your output should be in English;
 
 Your output:

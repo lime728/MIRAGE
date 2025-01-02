@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# @Time    : 2024/11/03
+# @Time    : 2025/01/02
 # @Author  : Yin Cai
 # @Project : MIRAGE
 # @File    : prompt_converse.txt
@@ -31,7 +31,7 @@ Here are your thoughts, actions, and the results of your last action:
 Now, after careful consideration, based on the historical conversation and your description, give your response.  
 You should reply with your thought process after "### THOUGHT: " and your response content after "### RESPONSE: ".  
 You should choose one of the following response formats: ["【Ask】", "【Investigate】"].
-When you choose "【Inquiry】," you should first reason based on historical information, then state your own point of view and the person you suspect. You can only choose one person to inquire about. Here are the people you can inquire about:  
+When you choose "【Ask】," you should first reason based on historical information, then state your own point of view and the person you suspect. You can only choose one person to inquire about. Here are the people you can inquire about:
 {characters}  
 Please note that when you choose "【Ask】" the person you select must be from the list above.
 Here is an example of an "【Ask】":
@@ -51,7 +51,7 @@ Note:
 1. Your output should align with the personality of the character.
 2. Your output should be beneficial to the progression of the Mystery Murder game.
 3. Your output must be in English.
-4. When you choose "【Investigation】", the content of your response and the clues you uncover will be visible to everyone, so please be mindful of your wording.
+4. When you choose "【Investigate】", the content of your response and the clues you uncover will be visible to everyone, so please be mindful of your wording.
 5. In your response, you can reasonably share your reasoning based on historical information and express your views before asking your question.  
 6. Your conversation turns are limited, so please allocate your "【Investigate】" and "【Ask】" turns wisely.
 

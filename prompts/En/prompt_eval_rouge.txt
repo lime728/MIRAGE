@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# @Time    : 2024/11/03
+# @Time    : 2025/01/02
 # @Author  : Yin Cai
 # @Project : MIRAGE
 # @File    : prompt_eval_rouge.txt
@@ -14,6 +14,14 @@ The core of "Mystery Murder" revolves around the following 5 key elements:
 4. Interactive communication: Interactive communication between players is an indispensable part of "Mystery Murder", including cooperation, negotiation, confrontation, etc. Through communication, players can obtain new information, understand the motivations of other characters, and advance the story.
 5. Ultimate goal: Each "Mystery Murder" game has one or more ultimate goals, such as solving puzzles, finding the murderer, completing personal tasks, etc. Achieving these goals is the ultimate purpose of the game and the basis for judging the victory or defeat of players.
 
+Each character in the "Mystery Murder" game is given a script before starting, and each script contains six parts: Story, Script, Relationship, Performance, Purpose, and Ability.
+1. Story generally contains the basic information of the character, such as name, gender, etc., as well as the background story of the character, such as the personal experience before the killing event in the script.
+2. Script usually contains the actions of the character in the script killing event.
+3. Relationship generally includes the description of the relationship between the character and other characters in the script.
+4. Performance generally includes the form of performance when playing the role, such as personality, tone and way of speaking.
+5. Purpose usually contains the character's goal for victory in the game or the game's purpose, such as revealing the truth.
+6. Ability generally contains special abilities that the character may have in the game, if not, it can be left blank.
+
 You are an experienced player of Mystery Murder games. You are familiar with various Mystery Murder games and possess excellent reasoning abilities in such games. Below is {name}'s performance during the game:
 
 Here is all the historical conversation content:  
@@ -25,9 +33,8 @@ Here are all the actions {name} took in the game:
 Here is the list of people participating in the game:  
 {role_list}
 
-Now, based on the above historical information, please deduce step by step the possible script of {name}.  
-The script should include elements such as the character's story, relationships, performance, goals, and abilities.  
-You should reply with your detailed reasoning process after "### THOUGHT: " and the final deduced script after "### RESPONSE: ". You should not reply with any extra content.
+Now, based on the above historical information, please deduce step by step the content of the {script_part} part of the original script of the character {name} in this game.
+You should reply with your detailed reasoning process after "### THOUGHT: " and reply to the content of {script_part} after "### RESPONSE: ". You should not reply with any extra content.
 
 Here is an example of a reply:
 
@@ -36,5 +43,7 @@ Here is an example of a reply:
 
 Note:  
 1. Your output should be in English.
+2. Your {script_part} response should be described in the second person.
+3. You can only reply to the content of "{script_part}" in {name} script after "### # RESPONSE:", and cannot reply to the content of other parts of the script
 
 Your output:

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# @Time    : 2024/11/03
+# @Time    : 2025/01/02
 # @Author  : Yin Cai
 # @Project : MIRAGE
 # @File    : prompt_query.txt
@@ -26,10 +26,10 @@ Now you need to carefully consider the historical dialogue content and evaluate 
 The evaluation should focus on the logic and flaws of the speech content, assessing the level of suspicion towards the murderer; the greater the suspicion, the more problematic the speech content appears.  
 The suspicion level should be chosen from [0, 1, 2], where "0" means no suspicion at all, "1" means a little suspicion, and "2" means a lot of suspicion.  
 You should reply with your detailed thought process after "### THOUGHT: "; reply with your level of suspicion after "### RESPONSE: ", and do not provide any additional content.  
-Here is an example of a little suspicion:  
+Here is an example:
 
 ### THOUGHT: XXX  
-### RESPONSE: 1  
+### RESPONSE: XXX
 
 Note:  
 1. Your output should revolve around the key elements of "Mystery Murder".
