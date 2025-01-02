@@ -27,10 +27,10 @@ parser.add_argument("--Only_Eval", action="store_true", help="Eval with exist hi
 parser.add_argument("--OE_Path", default=None, type=str,
                     help="Path of exist history script for only evaluation")
 parser.add_argument("--force_expose", action="store_true", help="Force to expose the culprits")
-parser.add_argument("--Base_Model", default="gpt-4-turbo", type=str,
+parser.add_argument("--Base_Model", default="gpt-4o-2024-08-06", type=str,
                     help="Api-based model for base functionality")
-parser.add_argument("--Culprit_Model", default='gpt-4-turbo', type=str, help="Api-based model for Culprits")
-parser.add_argument("--Civilian_Model", default='gpt-4-turbo', type=str, help="Api-based model for Civilians")
+parser.add_argument("--Culprit_Model", default='gpt-4o-2024-08-06', type=str, help="Api-based model for Culprits")
+parser.add_argument("--Civilian_Model", default='gpt-4o-2024-08-06', type=str, help="Api-based model for Civilians")
 parser.add_argument("--Eval_Model", default='gpt-4-turbo', type=str, help="Api based model for Evaluation")
 args = parser.parse_args()
 
