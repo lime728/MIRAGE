@@ -6,7 +6,7 @@ from config import Config
 class Api:
     def __init__(
             self,
-            model='gpt-4-1106-preview',
+            model='gpt-4-turbo',
             api='OpenAI',
             output_console=False
     ):
