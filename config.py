@@ -88,6 +88,7 @@ class Config:
     if not os.path.exists(LogPath):
         os.makedirs(LogPath)
 
+
 for k, v in vars(args).items():
     setattr(Config, k, v)
 
