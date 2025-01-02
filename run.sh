@@ -4,7 +4,6 @@ python main.py --Console --force_summary \
   --Civilian_Model gpt-4o-2024-08-06 \
   --Eval_Model gpt-4-turbo \
   --ScriptNumList 0 1 2 3 4 5 6 7 \
-  --ScriptNum None \
   --Language Zh \
   --MaxTurnNum 5 \
   --MaxRetries 20 \
