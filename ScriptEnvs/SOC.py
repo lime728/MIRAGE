@@ -89,13 +89,17 @@ class SOC(BaseEnv):
                 ls_address = self.address[name]
                 if name in self.address[name]:
                     ls_address.remove(name)
+                characters = list()
+                for c in list(self.scripts.keys()):
+                    if c != name:
+                        characters.append(c)
                 prompt_converse = self.prompt_converse_raw.format(
                     name=name,
                     description=background,
                     self_clues=self.role_parameter[name]['self_clues'],
                     history=self.history_introduction+self.history,
                     last_action=self.role_parameter[name]['last_action'][-1],
-                    characters=list(self.scripts.keys()),
+                    characters=characters,
                     address=ls_address
                 )
                 if logs is None:

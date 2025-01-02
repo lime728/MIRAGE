@@ -27,13 +27,17 @@ class MOC(BaseEnv):
             # converse
             print('**********Turn {}**********'.format(self.turns + 1))
             for name, background in self.env_summary.items():
+                characters = list()
+                for c in list(self.scripts.keys()):
+                    if c != name:
+                        characters.append(c)
                 prompt_converse = self.prompt_converse_raw.format(
                     name=name,
                     description=background,
                     self_clues=self.role_parameter[name]['self_clues'],
                     history=self.history_introduction+self.history,
                     last_action=self.role_parameter[name]['last_action'][-1],
-                    characters=list(self.scripts.keys()),
+                    characters=characters,
                 )
                 if logs is None:
                     while True:
@@ -343,6 +347,7 @@ class MOC(BaseEnv):
         self.llms_eval()
         print('Evaluation Stage Over...')
 
+        self.save_result()
         self.save_config()
         self.logger.close()
         print("******************************Finish******************************")

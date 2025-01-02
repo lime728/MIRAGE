@@ -100,6 +100,7 @@ class MUO(BaseEnv):
         self.llms_eval()
         print('Evaluation Stage Over...')
 
+        self.save_result()
         self.save_config()
         self.logger.close()
         print("******************************Finish******************************")
