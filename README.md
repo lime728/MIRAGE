@@ -1,7 +1,7 @@
-# MIRAGE
+# MIRAGE: Exploring How Large Language Models Perform in Complex Social Interactive Environments
 **M**ultiverse **I**nteractive **R**ole-play **A**bility **G**eneral **E**valuation **(MIRAGE)**
 
-## Introduction
+## 🎉 Introduction
 We provide a simulation for LLMs-Based-Agents to evaluate their behavior in a complex role-playing game such as in a mystery murder game.
 
 In our simulation, we provide **8** different scripts and **4** evaluation methods.
@@ -21,12 +21,17 @@ Here is a table of information of our scripts:
 
 We provide 4 proper evaluation methods: **TII** (**T**rust **I**nclination **I**ndex), **CIC** (**C**lue **I**nvestigation **C**apability), **ICI** (**I**nteractivity **C**apability **I**ndex) and **SCI** (**S**cript **C**ompliance **I**ndex).
 
-More experimental content and analysis can be found in the paper [MIRAGE: Exploring How Large Language Models Perform in Complex
-Social Interactive Environments]().
+More experimental content and analysis can be found in the paper [MIRAGE: Exploring How Large Language Models Perform in Complex Social Interactive Environments]().
 
 All configs can be found in [config.py](./config.py)
 
-## Quick Start
+## 🔥 Updates
+* 2025/01/02: We released the first version of our [paper](https://arxiv.org/abs/2406.10621).
+
+## 💡 Leaderboard
+Below
+
+## ⚙️ Quick Start
 ### Requirements
 First, Install requirements:
 ```bash
