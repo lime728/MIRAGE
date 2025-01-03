@@ -21,12 +21,12 @@ Here is a table of information of our scripts:
 
 We provide 4 proper evaluation methods: **TII** (**T**rust **I**nclination **I**ndex), **CIC** (**C**lue **I**nvestigation **C**apability), **ICI** (**I**nteractivity **C**apability **I**ndex) and **SCI** (**S**cript **C**ompliance **I**ndex).
 
-More experimental content and analysis can be found in the paper [MIRAGE: Exploring How Large Language Models Perform in Complex Social Interactive Environments]().
+More experimental content and analysis can be found in the [paper]().
 
 All configs can be found in [config.py](./config.py)
 
 ## 🔥 Updates
-* 2025/01/02: We released the first version of our [paper](https://arxiv.org/abs/2406.10621).
+* 2025/01/02: We released the first version of our [paper]().
 
 ## 💡 Leaderboard
 Below is the Total Average Results for a single simulation in each MIRAGE scenario.
@@ -54,4 +54,9 @@ Second, Add your Api Url and Api Key at [config.py](./config.py)
 Finally, Start simulation:
 ```bash
 bash run.sh
+```
+
+## 📒 Citation
+```
+content
 ```
