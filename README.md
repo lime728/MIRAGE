@@ -26,7 +26,7 @@ More experimental content and analysis can be found in the [paper]().
 All configs can be found in [config.py](./config.py)
 
 ## 🔥 Updates
-* 2025/01/02: We released the first version of our [paper]().
+* 2025/01/03: We released the first version of our [paper]().
 
 ## 💡 Leaderboard
 Below is the Total Average Results for a single simulation in each MIRAGE scenario.
