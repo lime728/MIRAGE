@@ -41,7 +41,7 @@ Below is the Total Average Results for a single simulation in each MIRAGE scenar
 | GPT-4o           | 6,252,580 / 1,328          | 204,772 / 574                | 47.01       | **78.69** | **35.92** | **76.80** | **51.29** |
 | Qwen-2-7B       | 2,204,029 / 743            | 192,158 / 588                | **51.81**   | 75.78     | 18.66     | 74.92     | 50.57     |
 | GLM-4-9B        | 4,071,805 / 1,328          | 204,772 / 574                | 31.89       | 53.85     | 20.07     | 71.60     | 48.13     |
-
+token不要了，四个指标算一个总分，下面介绍一下这四个指标，itemize
 
 ## ⚙️ Quick Start
 ### Requirements
