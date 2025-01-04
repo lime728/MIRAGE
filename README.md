@@ -19,7 +19,15 @@ Here is a table of information of our scripts:
 | 6 | Article 22 School Rules             | Multi     | Unorthodox | Close  | 5       | 7       | 17     | 91,532    | 41,728    |
 | 7 | Fox Hotel                           | Multi     | Unorthodox | Open   | 2       | 7       | 46     | 107,057   | 62,224    |
 
-We provide 4 proper evaluation methods: **TII** (**T**rust **I**nclination **I**ndex), **CIC** (**C**lue **I**nvestigation **C**apability), **ICI** (**I**nteractivity **C**apability **I**ndex) and **SCI** (**S**cript **C**ompliance **I**ndex).
+We provide 4 proper evaluation methods: 
+
+- **TII** (**T**rust **I**nclination **I**ndex)
+
+- **CIC** (**C**lue **I**nvestigation **C**apability)
+
+- **ICI** (**I**nteractivity **C**apability **I**ndex)
+
+- **SCI** (**S**cript **C**ompliance **I**ndex)
 
 More experimental content and analysis can be found in the [paper]().
 
@@ -30,7 +38,9 @@ All configs can be found in [config.py](./config.py)
 
 ## 💡 Leaderboard
 Below is the Total Average Results for a single simulation in each MIRAGE scenario.
+
 **Victory** shows the MRR score of the result of voting.
+
 **TII**, **CIC**, **ICI** and **SCI** respectively represent the **TII**, **CIC**, **ICI** and **SCI** scores of LLMs during the games.
 | **Model**        | **Victory** | **TII**   | **CIC**   | **ICI**   | **SCI**   | **Overall** |
 |------------------|-------------|-----------|-----------|-----------|-----------|-------------|
@@ -39,6 +49,9 @@ Below is the Total Average Results for a single simulation in each MIRAGE scenar
 | GPT-4o           | 47.01       | **78.69** | **35.92** | **76.80** | **51.29** | 57.94       |
 | Qwen-2-7B        | **51.81**   | 75.78     | 18.66     | 74.92     | 50.57     | 54.35       |
 | GLM-4-9B         | 31.89       | 53.85     | 20.07     | 71.60     | 48.13     | 45.11       |
+
+We utilized four distinct evaluation metrics to assess the proficiency of LLMs in navigating complex social interactions:
+
 - **Trust Inclination Index (TII)**:
   - Derived from a combination of suspicion and trust scores.
   - Scores are collected from other characters' Suspicion Module and Trust Module outputs after each Open Conversation Phase.
