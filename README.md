@@ -89,5 +89,10 @@ bash run.sh
 
 ## 📒 Citation
 ```
-content
+@article{cai2025mirage,
+  title={MIRAGE: Exploring How Large Language Models Perform in Complex Social Interactive Environments},
+  author={Cai Yin, Gu Zhouhong, Du Zhaohan, Ye Zheyu, Cao Shaosheng, Xu Yiqian, Feng Hongwei, Chen Ping},
+  journal={arXiv preprint arXiv:2501.01652},
+  year={2025}
+}
 ```
