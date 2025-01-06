@@ -29,12 +29,12 @@ We provide 4 proper evaluation methods:
 
 - **SCI** (**S**cript **C**ompliance **I**ndex)
 
-More experimental content and analysis can be found in the [paper]().
+More experimental content and analysis can be found in the [paper](https://arxiv.org/pdf/2501.01652).
 
 All configs can be found in [config.py](./config.py)
 
 ## 🔥 Updates
-* 2025/01/03: We released the first version of our [paper]().
+* 2025/01/03: We released the first version of our [paper](https://arxiv.org/pdf/2501.01652).
 
 ## 💡 Leaderboard
 Below is the Total Average Results for a single simulation in each MIRAGE scenario.
