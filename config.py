@@ -13,7 +13,7 @@ ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 parser = argparse.ArgumentParser()
 parser.add_argument("--ScriptNumList", default=[0, 1, 2, 3, 4, 5, 6, 7], nargs="+", type=int,
                     help="Chosen Script Numbers to run (From 0 to 7)  -- LOWER PRIORITY!")
-parser.add_argument("--ScriptNum", default=None,
+parser.add_argument("--ScriptNum", default=None, type=int,
                     help="Chosen Script Number (From 0 to 7) -- HIGHER PRIORITY!")
 parser.add_argument("--Language", default="Zh", type=str, help="Script Language: ['En', 'Zh']")
 parser.add_argument("--MaxTurnNum", default=5, type=int, help="Runnable Turn Number")
