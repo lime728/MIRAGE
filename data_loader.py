@@ -9,7 +9,7 @@ import jieba, re
 def cal_rouge_l(predict, truth):
     predict_ = ' '.join(jieba.cut(predict))
     truth_ = ' '.join(jieba.cut(truth))
-    return Rouge().get_scores(predict_, truth_)[0]['rouge-l']
+    return Rouge().get_scores(predict_, truth_)[0]['rouge-l']['f']
 
 
 def read_txt(path):
