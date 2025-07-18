@@ -186,6 +186,7 @@ class SOC(BaseEnv):
                         )
                     if Config.Console:
                         print(task_history + '\n')
+                    self.clue_count += 1
                 elif action == '询问' or action == 'Ask':
                     task_history = self.ask(item, name, background, self.history_introduction, self.history, ask_content, logs)
 
